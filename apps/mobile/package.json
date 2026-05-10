@@ -13,21 +13,30 @@
   },
   "dependencies": {
     "@fullstack/api-client": "workspace:*",
+    "@fullstack/config": "workspace:*",
     "@fullstack/types": "workspace:*",
     "expo": "latest",
+    "expo-auth-session": "latest",
     "expo-constants": "latest",
+    "expo-crypto": "latest",
+    "expo-document-picker": "latest",
     "expo-linking": "latest",
     "expo-router": "latest",
+    "expo-secure-store": "latest",
     "expo-status-bar": "latest",
+    "expo-web-browser": "latest",
+    "nativewind": "^4.2.1",
     "react": "latest",
     "react-dom": "19.2.6",
     "react-native": "latest",
+    "react-native-reanimated": "latest",
     "react-native-safe-area-context": "latest",
     "react-native-screens": "latest",
     "react-native-web": "^0.21.2"
   },
   "devDependencies": {
     "@types/react": "latest",
+    "tailwindcss": "^3.4.13",
     "typescript": "latest"
   }
 }

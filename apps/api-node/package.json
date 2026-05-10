@@ -7,24 +7,32 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server.js",
     "lint": "tsc -p tsconfig.json --noEmit",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx src/db/migrate.ts",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "latest",
+    "@aws-sdk/s3-request-presigner": "latest",
     "@fullstack/types": "workspace:*",
     "@novu/node": "latest",
     "cors": "latest",
     "dotenv": "latest",
+    "drizzle-orm": "latest",
     "express": "latest",
     "ioredis": "latest",
     "jose": "latest",
     "mysql2": "latest",
+    "uuid": "latest",
     "zod": "latest"
   },
   "devDependencies": {
     "@types/cors": "latest",
     "@types/express": "latest",
     "@types/node": "latest",
+    "@types/uuid": "latest",
+    "drizzle-kit": "latest",
     "tsx": "latest",
     "typescript": "latest"
   }

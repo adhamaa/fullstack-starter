@@ -5,12 +5,13 @@ import { checkMySql } from "./integrations/mysql.js";
 import { getNovuStatus } from "./integrations/novu.js";
 import { checkRedis } from "./integrations/redis.js";
 import { checkS3 } from "./integrations/s3.js";
-import { requireAuth } from "./integrations/keycloak.js";
+import { meRouter } from "./routes/me.js";
+import { uploadsRouter } from "./routes/uploads.js";
 
 const app = express();
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "1mb" }));
 
 async function dependencyStatus(check: () => Promise<void>) {
   try {
@@ -29,14 +30,16 @@ app.get("/health", async (_request, response) => {
     novu: getNovuStatus()
   };
 
-  const status = {
+  const overall = Object.values(dependencies).every((value) => value === "ok" || value === "missing")
+    ? ("ok" as const)
+    : ("degraded" as const);
+
+  response.json({
     service: "api-node",
-    status: Object.values(dependencies).every((value) => value === "ok") ? "ok" : "degraded",
+    status: overall,
     timestamp: new Date().toISOString(),
     dependencies
-  };
-
-  response.json(status);
+  });
 });
 
 app.get("/health/flask", async (_request, response) => {
@@ -44,8 +47,12 @@ app.get("/health/flask", async (_request, response) => {
   response.status(flaskResponse.status).json(await flaskResponse.json());
 });
 
-app.get("/me", requireAuth, (_request, response) => {
-  response.json({ user: response.locals.user });
+app.use(meRouter);
+app.use(uploadsRouter);
+
+app.use((error: unknown, _request: express.Request, response: express.Response, _next: express.NextFunction) => {
+  console.error("[api-node] unhandled error:", error);
+  response.status(500).json({ error: "internal_server_error" });
 });
 
 app.listen(env.NODE_API_PORT, () => {

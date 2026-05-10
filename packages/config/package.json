@@ -3,6 +3,13 @@
   "private": true,
   "version": "0.0.0",
   "exports": {
-    "./tsconfig/base": "./tsconfig.base.json"
-  }
+    "./tsconfig/base": "./tsconfig.base.json",
+    "./tailwind-preset": "./tailwind-preset.cjs",
+    "./tailwind-theme.css": "./tailwind-theme.css"
+  },
+  "files": [
+    "tailwind-preset.cjs",
+    "tailwind-theme.css",
+    "tsconfig.base.json"
+  ]
 }
