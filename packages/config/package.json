@@ -1,0 +1,8 @@
+{
+  "name": "@fullstack/config",
+  "private": true,
+  "version": "0.0.0",
+  "exports": {
+    "./tsconfig/base": "./tsconfig.base.json"
+  }
+}
