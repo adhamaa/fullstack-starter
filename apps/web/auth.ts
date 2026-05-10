@@ -86,14 +86,27 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         return current;
       }
 
-      if (!current.refreshToken) return current;
+      if (!current.refreshToken) {
+        // Access token is expired (or its expiry is unknown) and we have no way
+        // to mint a new one. Drop the stale access token and signal the error
+        // so callers stop sending it and can prompt the user to sign in again.
+        return {
+          ...current,
+          accessToken: undefined,
+          error: "RefreshAccessTokenError" as const
+        } satisfies AuthToken;
+      }
 
       try {
         const refreshed = await refreshAccessToken(current.refreshToken);
         return { ...current, ...refreshed, error: undefined } satisfies AuthToken;
       } catch (error) {
         console.warn("[auth] refresh failed:", (error as Error).message);
-        return { ...current, error: "RefreshAccessTokenError" as const } satisfies AuthToken;
+        return {
+          ...current,
+          accessToken: undefined,
+          error: "RefreshAccessTokenError" as const
+        } satisfies AuthToken;
       }
     },
     async session({ session, token }) {
