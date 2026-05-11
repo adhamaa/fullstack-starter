@@ -43,6 +43,26 @@ pnpm dev:api-node
 pnpm dev:api-python
 ```
 
+## Windows notes
+
+Two things will trip you up on Windows that don't show up on macOS / Linux:
+
+- **Next.js dev uses webpack, not Turbopack.** `apps/web` runs `next dev --webpack` deliberately. Turbopack 16.x makes thousands of tiny parallel writes to `.next/dev/...` and on Windows (especially when the repo lives on a non-system drive like `D:` and/or under Defender real-time scan) it dies with `os error 1450 — Insufficient system resources`, after which the Node host OOMs trying to deserialise messages from the dead Rust workers. If you ever see `TurbopackInternalError: failed to write to ...middleware-manifest.json` or "Committing semi space failed" with tiny (5–10 MB) heap numbers, do not chase it as a memory bug — it is the kernel refusing I/O. Stay on `--webpack`.
+- **Metro must be told the monorepo layout.** [`apps/mobile/metro.config.js`](apps/mobile/metro.config.js) explicitly sets `watchFolders` to the mobile app and the three workspace packages it consumes, plus `disableHierarchicalLookup`. Without that, Metro walks the entire workspace `node_modules` (including pnpm's deeply-nested `.pnpm/<hash>/node_modules/@aws-sdk/...` paths from the api-node deps) and fails on Windows with `lstat: UNKNOWN` once a path exceeds `MAX_PATH`.
+
+If a previous run crashed mid-compile and `apps/web/.next/dev/server/middleware/middleware-manifest.json` is half-written, delete the cache before restarting:
+
+```bash
+rm -rf apps/web/.next
+```
+
+If port 3000 stays held after a crash:
+
+```bash
+netstat -ano | grep ":3000.*LISTENING"
+taskkill //F //PID <pid>
+```
+
 ## Local URLs
 
 - Next.js: http://localhost:3000
@@ -114,7 +134,7 @@ The expected workflow `upload-created` is documented in [`infra/novu/README.md`]
 Design tokens (colors, fonts) live in [`packages/config`](packages/config) and are shared across web and mobile.
 
 - **Web** uses **Tailwind CSS v4** via `@tailwindcss/postcss`. Tokens are defined in [`packages/config/tailwind-theme.css`](packages/config/tailwind-theme.css) using the v4 `@theme` block and imported from [`apps/web/app/styles.css`](apps/web/app/styles.css).
-- **Mobile** uses **NativeWind v4** which still requires **Tailwind v3**. The same tokens are mirrored in [`packages/config/tailwind-preset.cjs`](packages/config/tailwind-preset.cjs); when you change one file, mirror it in the other.
+- **Mobile** uses **NativeWind v4** which still requires **Tailwind v3**. [`apps/mobile/tailwind.config.js`](apps/mobile/tailwind.config.js) must list `require("nativewind/preset")` first (Metro fails without it), then the shared design preset in [`packages/config/tailwind-preset.cjs`](packages/config/tailwind-preset.cjs). When you change tokens, keep `tailwind-theme.css` (web) and `tailwind-preset.cjs` (mobile) in sync.
 
 ## Python API
 
