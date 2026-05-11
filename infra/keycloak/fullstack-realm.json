@@ -33,10 +33,7 @@
     }
   ],
   "roles": {
-    "realm": [
-      { "name": "user" },
-      { "name": "admin" }
-    ]
+    "realm": [{ "name": "user" }, { "name": "admin" }]
   },
   "users": [
     {
@@ -46,9 +43,7 @@
       "email": "demo@example.com",
       "firstName": "Demo",
       "lastName": "User",
-      "credentials": [
-        { "type": "password", "value": "demo", "temporary": false }
-      ],
+      "credentials": [{ "type": "password", "value": "demo", "temporary": false }],
       "realmRoles": ["user"]
     }
   ]

@@ -1,16 +1,16 @@
-import Link from "next/link";
-import { auth, signIn, signOut } from "../auth";
-import { apiClient } from "../lib/api";
+import Link from 'next/link'
+import { auth, signIn, signOut } from '../auth'
+import { apiClient } from '../lib/api'
 
 export default async function HomePage() {
-  const session = await auth();
-  let apiStatus = "not checked";
+  const session = await auth()
+  let apiStatus = 'not checked'
 
   try {
-    const health = await apiClient(session?.accessToken).health();
-    apiStatus = `${health.service}: ${health.status}`;
+    const health = await apiClient(session?.accessToken).health()
+    apiStatus = `${health.service}: ${health.status}`
   } catch {
-    apiStatus = "Node API is not reachable yet";
+    apiStatus = 'Node API is not reachable yet'
   }
 
   return (
@@ -21,8 +21,8 @@ export default async function HomePage() {
         </p>
         <h1 className="mt-4 mb-4 font-extrabold">Next.js + Expo + Node + Flask</h1>
         <p className="text-ink-muted">
-          Local infra is ready for MySQL, Redis, MinIO/S3, Keycloak, and Novu.
-          Start Docker first, then run the apps you need.
+          Local infra is ready for MySQL, Redis, MinIO/S3, Keycloak, and Novu. Start Docker first,
+          then run the apps you need.
         </p>
         <div className="inline-flex mt-6 px-4 py-3 rounded-full bg-bg-muted text-[#bae6fd]">
           Node API: {apiStatus}
@@ -42,8 +42,8 @@ export default async function HomePage() {
               </Link>
               <form
                 action={async () => {
-                  "use server";
-                  await signOut({ redirectTo: "/" });
+                  'use server'
+                  await signOut({ redirectTo: '/' })
                 }}
               >
                 <button
@@ -57,8 +57,8 @@ export default async function HomePage() {
           ) : (
             <form
               action={async () => {
-                "use server";
-                await signIn("keycloak", { redirectTo: "/dashboard" });
+                'use server'
+                await signIn('keycloak', { redirectTo: '/dashboard' })
               }}
             >
               <button
@@ -72,5 +72,5 @@ export default async function HomePage() {
         </div>
       </section>
     </main>
-  );
+  )
 }

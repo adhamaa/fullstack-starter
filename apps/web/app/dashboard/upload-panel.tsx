@@ -1,87 +1,87 @@
-"use client";
+'use client'
 
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation'
+import { useState, useTransition } from 'react'
 
 type UploadRow = {
-  id: string;
-  filename: string;
-  contentType: string;
-  sizeBytes: number;
-  status: "pending" | "ready";
-  createdAt: string;
-};
+  id: string
+  filename: string
+  contentType: string
+  sizeBytes: number
+  status: 'pending' | 'ready'
+  createdAt: string
+}
 
 export function UploadPanel({ initialUploads }: { initialUploads: UploadRow[] }) {
-  const router = useRouter();
-  const [uploads, setUploads] = useState<UploadRow[]>(initialUploads);
-  const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
-  const [, startTransition] = useTransition();
+  const router = useRouter()
+  const [uploads, setUploads] = useState<UploadRow[]>(initialUploads)
+  const [busy, setBusy] = useState(false)
+  const [message, setMessage] = useState<string | null>(null)
+  const [, startTransition] = useTransition()
 
   async function onFile(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    event.target.value = "";
-    if (!file) return;
+    const file = event.target.files?.[0]
+    event.target.value = ''
+    if (!file) return
 
-    setBusy(true);
-    setMessage(null);
+    setBusy(true)
+    setMessage(null)
 
     try {
-      const presignResponse = await fetch("/dashboard/api/presign", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const presignResponse = await fetch('/dashboard/api/presign', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           filename: file.name,
-          contentType: file.type || "application/octet-stream",
-          sizeBytes: file.size
-        })
-      });
+          contentType: file.type || 'application/octet-stream',
+          sizeBytes: file.size,
+        }),
+      })
       if (!presignResponse.ok) {
-        throw new Error(`presign failed: ${presignResponse.status}`);
+        throw new Error(`presign failed: ${presignResponse.status}`)
       }
       const presign = (await presignResponse.json()) as {
-        uploadId: string;
-        url: string;
-        headers: Record<string, string>;
-      };
+        uploadId: string
+        url: string
+        headers: Record<string, string>
+      }
 
       const putResponse = await fetch(presign.url, {
-        method: "PUT",
+        method: 'PUT',
         headers: presign.headers,
-        body: file
-      });
+        body: file,
+      })
       if (!putResponse.ok) {
-        throw new Error(`upload failed: ${putResponse.status}`);
+        throw new Error(`upload failed: ${putResponse.status}`)
       }
 
       const completeResponse = await fetch(
         `/dashboard/api/complete?id=${encodeURIComponent(presign.uploadId)}`,
-        { method: "POST" }
-      );
+        { method: 'POST' },
+      )
       if (!completeResponse.ok) {
-        throw new Error(`complete failed: ${completeResponse.status}`);
+        throw new Error(`complete failed: ${completeResponse.status}`)
       }
-      const completed = (await completeResponse.json()) as UploadRow;
+      const completed = (await completeResponse.json()) as UploadRow
 
-      setUploads((prev) => [completed, ...prev.filter((row) => row.id !== completed.id)]);
-      setMessage(`Uploaded ${file.name}`);
-      startTransition(() => router.refresh());
+      setUploads((prev) => [completed, ...prev.filter((row) => row.id !== completed.id)])
+      setMessage(`Uploaded ${file.name}`)
+      startTransition(() => router.refresh())
     } catch (error) {
-      setMessage((error as Error).message);
+      setMessage((error as Error).message)
     } finally {
-      setBusy(false);
+      setBusy(false)
     }
   }
 
   async function downloadOne(id: string) {
-    const response = await fetch(`/dashboard/api/download?id=${encodeURIComponent(id)}`);
+    const response = await fetch(`/dashboard/api/download?id=${encodeURIComponent(id)}`)
     if (!response.ok) {
-      setMessage(`download URL failed: ${response.status}`);
-      return;
+      setMessage(`download URL failed: ${response.status}`)
+      return
     }
-    const { url } = (await response.json()) as { url: string };
-    window.open(url, "_blank", "noopener,noreferrer");
+    const { url } = (await response.json()) as { url: string }
+    window.open(url, '_blank', 'noopener,noreferrer')
   }
 
   return (
@@ -90,10 +90,10 @@ export function UploadPanel({ initialUploads }: { initialUploads: UploadRow[] })
         <h2 className="text-xl font-semibold">Uploads</h2>
         <label
           className={`inline-flex items-center gap-2 rounded-lg bg-accent text-accent-fg px-4 py-2.5 font-semibold text-sm cursor-pointer ${
-            busy ? "opacity-60 cursor-not-allowed" : ""
+            busy ? 'opacity-60 cursor-not-allowed' : ''
           }`}
         >
-          {busy ? "Uploading…" : "Upload a file"}
+          {busy ? 'Uploading…' : 'Upload a file'}
           <input type="file" hidden disabled={busy} onChange={onFile} />
         </label>
       </div>
@@ -116,15 +116,16 @@ export function UploadPanel({ initialUploads }: { initialUploads: UploadRow[] })
               <div>
                 <strong>{upload.filename}</strong>
                 <span className="text-ink-subtle text-sm">
-                  {" "}
-                  · {upload.contentType} · {(upload.sizeBytes / 1024).toFixed(1)} KB · {upload.status}
+                  {' '}
+                  · {upload.contentType} · {(upload.sizeBytes / 1024).toFixed(1)} KB ·{' '}
+                  {upload.status}
                 </span>
               </div>
               <button
                 type="button"
                 className="inline-flex items-center gap-2 rounded-lg border border-slate-700 bg-transparent text-ink-muted px-3 py-1.5 font-semibold text-xs cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 onClick={() => downloadOne(upload.id)}
-                disabled={upload.status !== "ready"}
+                disabled={upload.status !== 'ready'}
               >
                 Download
               </button>
@@ -133,5 +134,5 @@ export function UploadPanel({ initialUploads }: { initialUploads: UploadRow[] })
         </ul>
       )}
     </div>
-  );
+  )
 }

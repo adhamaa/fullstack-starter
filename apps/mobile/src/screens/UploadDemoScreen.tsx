@@ -1,75 +1,68 @@
-import * as DocumentPicker from "expo-document-picker";
-import { Link } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  FlatList,
-  Pressable,
-  SafeAreaView,
-  Text,
-  View
-} from "react-native";
-import type { Upload } from "@fullstack/types";
-import { useAuth } from "../auth/AuthContext";
-import { makeApi } from "../lib/api";
+import type { Upload } from '@fullstack/types'
+import * as DocumentPicker from 'expo-document-picker'
+import { Link } from 'expo-router'
+import { useCallback, useEffect, useState } from 'react'
+import { ActivityIndicator, FlatList, Pressable, SafeAreaView, Text, View } from 'react-native'
+import { useAuth } from '../auth/AuthContext'
+import { makeApi } from '../lib/api'
 
 export function UploadDemoScreen() {
-  const { getAccessToken } = useAuth();
-  const [uploads, setUploads] = useState<Upload[]>([]);
-  const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
+  const { getAccessToken } = useAuth()
+  const [uploads, setUploads] = useState<Upload[]>([])
+  const [busy, setBusy] = useState(false)
+  const [message, setMessage] = useState<string | null>(null)
 
   const refresh = useCallback(async () => {
     try {
-      const result = await makeApi(getAccessToken).listUploads();
-      setUploads(result.uploads);
+      const result = await makeApi(getAccessToken).listUploads()
+      setUploads(result.uploads)
     } catch (error) {
-      setMessage((error as Error).message);
+      setMessage((error as Error).message)
     }
-  }, [getAccessToken]);
+  }, [getAccessToken])
 
   useEffect(() => {
-    void refresh();
-  }, [refresh]);
+    void refresh()
+  }, [refresh])
 
   const pickAndUpload = useCallback(async () => {
     const picked = await DocumentPicker.getDocumentAsync({
       copyToCacheDirectory: true,
-      multiple: false
-    });
-    if (picked.canceled || !picked.assets?.[0]) return;
-    const asset = picked.assets[0];
+      multiple: false,
+    })
+    if (picked.canceled || !picked.assets?.[0]) return
+    const asset = picked.assets[0]
 
-    setBusy(true);
-    setMessage(null);
+    setBusy(true)
+    setMessage(null)
 
     try {
-      const api = makeApi(getAccessToken);
+      const api = makeApi(getAccessToken)
       const presign = await api.presignUpload({
         filename: asset.name,
-        contentType: asset.mimeType ?? "application/octet-stream",
-        sizeBytes: asset.size ?? 0
-      });
+        contentType: asset.mimeType ?? 'application/octet-stream',
+        sizeBytes: asset.size ?? 0,
+      })
 
-      const fileResponse = await fetch(asset.uri);
-      const blob = await fileResponse.blob();
+      const fileResponse = await fetch(asset.uri)
+      const blob = await fileResponse.blob()
 
       const putResponse = await fetch(presign.url, {
-        method: "PUT",
+        method: 'PUT',
         headers: presign.headers,
-        body: blob
-      });
-      if (!putResponse.ok) throw new Error(`upload failed: ${putResponse.status}`);
+        body: blob,
+      })
+      if (!putResponse.ok) throw new Error(`upload failed: ${putResponse.status}`)
 
-      await api.completeUpload(presign.uploadId);
-      setMessage(`Uploaded ${asset.name}`);
-      await refresh();
+      await api.completeUpload(presign.uploadId)
+      setMessage(`Uploaded ${asset.name}`)
+      await refresh()
     } catch (error) {
-      setMessage((error as Error).message);
+      setMessage((error as Error).message)
     } finally {
-      setBusy(false);
+      setBusy(false)
     }
-  }, [getAccessToken, refresh]);
+  }, [getAccessToken, refresh])
 
   return (
     <SafeAreaView className="flex-1 bg-bg">
@@ -84,16 +77,14 @@ export function UploadDemoScreen() {
           <Pressable
             disabled={busy}
             onPress={() => {
-              void pickAndUpload();
+              void pickAndUpload()
             }}
-            className={`mt-4 self-start rounded-lg bg-accent px-4 py-3 ${
-              busy ? "opacity-60" : ""
-            }`}
+            className={`mt-4 self-start rounded-lg bg-accent px-4 py-3 ${busy ? 'opacity-60' : ''}`}
           >
             <View className="flex-row items-center gap-2">
               {busy && <ActivityIndicator color="#0f172a" />}
               <Text className="font-bold text-accent-fg">
-                {busy ? "Uploading…" : "Pick a file"}
+                {busy ? 'Uploading…' : 'Pick a file'}
               </Text>
             </View>
           </Pressable>
@@ -116,9 +107,7 @@ export function UploadDemoScreen() {
           <FlatList
             data={uploads}
             keyExtractor={(item) => item.id}
-            ListEmptyComponent={
-              <Text className="px-2 text-ink-subtle">No uploads yet.</Text>
-            }
+            ListEmptyComponent={<Text className="px-2 text-ink-subtle">No uploads yet.</Text>}
             renderItem={({ item }) => (
               <View className="m-1 rounded-xl bg-bg-muted p-3">
                 <Text className="font-bold text-ink">{item.filename}</Text>
@@ -131,5 +120,5 @@ export function UploadDemoScreen() {
         </View>
       </View>
     </SafeAreaView>
-  );
+  )
 }

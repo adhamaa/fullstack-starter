@@ -11,13 +11,14 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,yml,yaml}\"",
+    "format": "biome format --write .",
+    "check": "biome check .",
     "infra:up": "docker compose -f infra/docker-compose.yml up -d",
     "infra:down": "docker compose -f infra/docker-compose.yml down"
   },
   "devDependencies": {
+    "@biomejs/biome": "latest",
     "cross-env": "^7.0.3",
-    "prettier": "latest",
     "turbo": "latest",
     "typescript": "latest"
   }

@@ -51,9 +51,7 @@
       "compositePrimaryKeys": {
         "users_id": {
           "name": "users_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -133,9 +131,7 @@
       "indexes": {
         "uploads_user_id_idx": {
           "name": "uploads_user_id_idx",
-          "columns": [
-            "user_id"
-          ],
+          "columns": ["user_id"],
           "isUnique": false
         }
       },
@@ -144,12 +140,8 @@
           "name": "uploads_user_id_users_id_fk",
           "tableFrom": "uploads",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -157,9 +149,7 @@
       "compositePrimaryKeys": {
         "uploads_id": {
           "name": "uploads_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},

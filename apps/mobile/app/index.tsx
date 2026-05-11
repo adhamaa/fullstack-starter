@@ -1,10 +1,10 @@
-import { ActivityIndicator, SafeAreaView, View } from "react-native";
-import { useAuth } from "../src/auth/AuthContext";
-import { HomeScreen } from "../src/screens/HomeScreen";
-import { SignInScreen } from "../src/screens/SignInScreen";
+import { ActivityIndicator, SafeAreaView, View } from 'react-native'
+import { useAuth } from '../src/auth/AuthContext'
+import { HomeScreen } from '../src/screens/HomeScreen'
+import { SignInScreen } from '../src/screens/SignInScreen'
 
 export default function Index() {
-  const { ready, accessToken } = useAuth();
+  const { ready, accessToken } = useAuth()
 
   if (!ready) {
     return (
@@ -13,8 +13,8 @@ export default function Index() {
           <ActivityIndicator color="#38bdf8" />
         </View>
       </SafeAreaView>
-    );
+    )
   }
 
-  return accessToken ? <HomeScreen /> : <SignInScreen />;
+  return accessToken ? <HomeScreen /> : <SignInScreen />
 }
