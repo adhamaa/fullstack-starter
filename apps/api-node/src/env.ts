@@ -31,7 +31,8 @@ const envSchema = z.object({
   S3_SECRET_ACCESS_KEY: z.string().default('minioadmin'),
   NOVU_SECRET_KEY: z.string().optional(),
   KEYCLOAK_ISSUER: z.string().url().default('http://localhost:8080/realms/fullstack'),
-  KEYCLOAK_AUDIENCE: z.string().default('fullstack-api'),
+  // Comma-separated list of accepted audiences (e.g. "fullstack-web,fullstack-api").
+  KEYCLOAK_AUDIENCE: z.string().default('fullstack-web,fullstack-api'),
 })
 
 export const env = envSchema.parse(process.env)

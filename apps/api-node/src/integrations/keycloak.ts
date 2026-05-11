@@ -5,7 +5,12 @@ import { env } from '../env.js'
 const jwks = createRemoteJWKSet(new URL(`${env.KEYCLOAK_ISSUER}/protocol/openid-connect/certs`))
 
 export async function verifyAccessToken(token: string) {
-  const audience = env.KEYCLOAK_AUDIENCE ? [env.KEYCLOAK_AUDIENCE, 'account'] : undefined
+  const configured = env.KEYCLOAK_AUDIENCE
+    ? env.KEYCLOAK_AUDIENCE.split(',')
+        .map((s) => s.trim())
+        .filter(Boolean)
+    : []
+  const audience = configured.length > 0 ? [...configured, 'account'] : undefined
   return jwtVerify(token, jwks, {
     issuer: env.KEYCLOAK_ISSUER,
     ...(audience ? { audience } : {}),
