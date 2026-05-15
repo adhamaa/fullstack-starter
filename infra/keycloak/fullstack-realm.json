@@ -1,6 +1,9 @@
 {
   "realm": "fullstack",
   "enabled": true,
+  "loginTheme": "fullstack-web-default",
+  "accountTheme": "fullstack-web-default",
+  "emailTheme": "fullstack-web-default",
   "clients": [
     {
       "clientId": "fullstack-api",
@@ -17,6 +20,9 @@
       "protocol": "openid-connect",
       "publicClient": false,
       "secret": "fullstack-web-dev-secret",
+      "attributes": {
+        "login_theme": "fullstack-web-default"
+      },
       "standardFlowEnabled": true,
       "directAccessGrantsEnabled": false,
       "redirectUris": ["http://localhost:3000/*"],
@@ -28,6 +34,9 @@
       "enabled": true,
       "protocol": "openid-connect",
       "publicClient": true,
+      "attributes": {
+        "login_theme": "fullstack-mobile-default"
+      },
       "redirectUris": ["fullstackstarter://*", "exp://*"],
       "webOrigins": ["*"]
     }

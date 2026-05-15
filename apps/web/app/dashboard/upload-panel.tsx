@@ -1,20 +1,12 @@
 'use client'
 
+import type { Upload } from '@fullstack/types'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 
-type UploadRow = {
-  id: string
-  filename: string
-  contentType: string
-  sizeBytes: number
-  status: 'pending' | 'ready'
-  createdAt: string
-}
-
-export function UploadPanel({ initialUploads }: { initialUploads: UploadRow[] }) {
+export function UploadPanel({ initialUploads }: { initialUploads: Upload[] }) {
   const router = useRouter()
-  const [uploads, setUploads] = useState<UploadRow[]>(initialUploads)
+  const [uploads, setUploads] = useState<Upload[]>(initialUploads)
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
   const [, startTransition] = useTransition()
@@ -62,7 +54,7 @@ export function UploadPanel({ initialUploads }: { initialUploads: UploadRow[] })
       if (!completeResponse.ok) {
         throw new Error(`complete failed: ${completeResponse.status}`)
       }
-      const completed = (await completeResponse.json()) as UploadRow
+      const completed = (await completeResponse.json()) as Upload
 
       setUploads((prev) => [completed, ...prev.filter((row) => row.id !== completed.id)])
       setMessage(`Uploaded ${file.name}`)

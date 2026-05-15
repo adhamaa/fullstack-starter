@@ -11,6 +11,7 @@ A Turborepo starter for:
 - MinIO as local S3-compatible storage
 - Novu notification integration (optional)
 - Keycloak authentication
+- Keycloakify themes (login/account/email) — see [`infra/keycloak/THEMING.md`](infra/keycloak/THEMING.md)
 
 ## Requirements
 
@@ -72,6 +73,17 @@ taskkill //F //PID <pid>
 - MinIO API: http://localhost:9000
 - MinIO Console: http://localhost:9001
 - Mailpit: http://localhost:8025
+
+## Keycloak themes
+
+Build the Keycloakify themes and start infra:
+
+```bash
+pnpm build:keycloak-theme
+pnpm infra:up
+```
+
+More detail: [`infra/keycloak/THEMING.md`](infra/keycloak/THEMING.md)
 
 ## Sign in (web)
 

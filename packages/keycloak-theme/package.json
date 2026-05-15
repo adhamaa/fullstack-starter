@@ -1,0 +1,38 @@
+{
+    "name": "@fullstack/keycloak-theme",
+    "private": true,
+    "version": "0.0.0",
+    "description": "Keycloak 26 theme(s) built with Keycloakify",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build:app": "tsc -p tsconfig.json && vite build",
+        "build:kc": "node ./scripts/run-build-kc.mjs",
+        "build:themes": "pnpm run build:kc && node ./scripts/extract-themes.mjs",
+        "build": "pnpm run build:themes",
+        "lint": "biome check src scripts vite.config.ts",
+        "typecheck": "tsc -p tsconfig.json --noEmit"
+    },
+    "license": "MIT",
+    "keywords": [],
+    "dependencies": {
+        "@fullstack/config": "workspace:*",
+        "keycloakify": "latest",
+        "react": "latest",
+        "react-dom": "latest"
+    },
+    "devDependencies": {
+        "@tailwindcss/vite": "latest",
+        "@types/node": "latest",
+        "@types/react": "latest",
+        "@types/react-dom": "latest",
+        "@vitejs/plugin-react": "latest",
+        "adm-zip": "latest",
+        "tailwindcss": "^4.1.16",
+        "typescript": "latest",
+        "vite": "latest"
+    },
+    "engines": {
+        "node": "^18.0.0 || >=20.0.0"
+    }
+}

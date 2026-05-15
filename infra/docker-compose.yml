@@ -67,9 +67,23 @@ services:
       MYSQL_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-keycloak_password}
     volumes:
       - ./data/keycloak-mysql:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-uroot",
+          "-p${KEYCLOAK_DB_ROOT_PASSWORD:-keycloak_root_password}",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 30
 
   keycloak:
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:26.0.7
     restart: unless-stopped
     command: start-dev --import-realm
     environment:
@@ -84,8 +98,10 @@ services:
       - "8080:8080"
     volumes:
       - ./keycloak/fullstack-realm.json:/opt/keycloak/data/import/fullstack-realm.json:ro
+      - ./keycloak/themes:/opt/keycloak/themes
     depends_on:
-      - keycloak-db
+      keycloak-db:
+        condition: service_healthy
 
   mailpit:
     image: axllent/mailpit:latest

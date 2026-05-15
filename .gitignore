@@ -18,3 +18,15 @@ npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
 infra/data
+
+# Keycloakify build output (generated locally / in CI)
+packages/keycloak-theme/dist_keycloak
+
+# Built Keycloak themes copied for docker volume mounting
+infra/keycloak/themes/*
+!infra/keycloak/themes/.gitkeep
+
+# Portable JDK/Maven used for local Keycloakify builds (optional)
+tools/jdk21/
+tools/apache-maven-3.9.6/
+tools/*.zip

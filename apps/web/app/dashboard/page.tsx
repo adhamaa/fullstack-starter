@@ -1,4 +1,4 @@
-import type { CurrentUser } from '@fullstack/types'
+import type { CurrentUser, Upload } from '@fullstack/types'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { auth, signOut } from '../../auth'
@@ -14,14 +14,7 @@ export default async function DashboardPage() {
   const api = apiClient(session.accessToken)
 
   let me: CurrentUser | undefined
-  let uploads: Array<{
-    id: string
-    filename: string
-    contentType: string
-    sizeBytes: number
-    status: 'pending' | 'ready'
-    createdAt: string
-  }> = []
+  let uploads: Upload[] = []
   let loadError: string | null = null
 
   try {

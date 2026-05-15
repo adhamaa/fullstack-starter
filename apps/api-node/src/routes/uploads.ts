@@ -1,9 +1,13 @@
 import { GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import {
+  presignRequestSchema,
+  uploadFromDb,
+  type PresignResponse,
+} from '@fullstack/types'
 import { and, desc, eq } from 'drizzle-orm'
 import { Router } from 'express'
 import { v4 as uuid } from 'uuid'
-import { z } from 'zod'
 import { db } from '../db/index.js'
 import { uploads } from '../db/schema/index.js'
 import { env } from '../env.js'
@@ -14,16 +18,6 @@ import { s3 } from '../integrations/s3.js'
 export const uploadsRouter: Router = Router()
 
 uploadsRouter.use(requireAuth)
-
-const presignBody = z.object({
-  filename: z.string().min(1).max(255),
-  contentType: z.string().min(1).max(127),
-  sizeBytes: z
-    .number()
-    .int()
-    .nonnegative()
-    .max(50 * 1024 * 1024 * 1024),
-})
 
 const PRESIGN_TTL_SECONDS = 60 * 15
 
@@ -39,7 +33,7 @@ function buildObjectKey(sub: string, filename: string) {
 }
 
 uploadsRouter.post('/uploads/presign', async (request, response) => {
-  const parsed = presignBody.safeParse(request.body)
+  const parsed = presignRequestSchema.safeParse(request.body)
   if (!parsed.success) {
     response.status(400).json({ error: 'invalid body', issues: parsed.error.issues })
     return
@@ -69,14 +63,16 @@ uploadsRouter.post('/uploads/presign', async (request, response) => {
     { expiresIn: PRESIGN_TTL_SECONDS },
   )
 
-  response.json({
+  const body: PresignResponse = {
     uploadId: id,
     key,
     url,
-    method: 'PUT' as const,
+    method: 'PUT',
     headers: { 'Content-Type': parsed.data.contentType },
     expiresAt: new Date(Date.now() + PRESIGN_TTL_SECONDS * 1000).toISOString(),
-  })
+  }
+
+  response.json(body)
 })
 
 uploadsRouter.post('/uploads/:id/complete', async (request, response) => {
@@ -104,7 +100,7 @@ uploadsRouter.post('/uploads/:id/complete', async (request, response) => {
     })
   }
 
-  response.json({ ...row, status: 'ready' as const })
+  response.json(uploadFromDb({ ...row, status: 'ready' }))
 })
 
 uploadsRouter.get('/uploads', async (_request, response) => {
@@ -115,7 +111,8 @@ uploadsRouter.get('/uploads', async (_request, response) => {
     .where(eq(uploads.userId, sub))
     .orderBy(desc(uploads.createdAt))
     .limit(100)
-  response.json({ uploads: rows })
+
+  response.json({ uploads: rows.map((row) => uploadFromDb(row)) })
 })
 
 uploadsRouter.get('/uploads/:id/download', async (request, response) => {
