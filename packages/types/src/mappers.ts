@@ -3,7 +3,7 @@ import {
   currentUserSchema,
   keycloakAccessClaimsSchema,
   uploadSchema,
-} from './schemas.js'
+} from './schemas'
 
 type KeycloakAccessClaims = z.infer<typeof keycloakAccessClaimsSchema>
 

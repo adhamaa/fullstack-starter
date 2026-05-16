@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { currentUserFromKeycloakClaims, uploadFromDb } from './mappers.js'
-import { presignRequestSchema, uploadSchema } from './schemas.js'
+import { currentUserFromKeycloakClaims, uploadFromDb } from './mappers'
+import { presignRequestSchema, uploadSchema } from './schemas'
 
 describe('presignRequestSchema', () => {
   it('accepts a valid presign body', () => {

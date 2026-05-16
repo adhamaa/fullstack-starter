@@ -20,10 +20,12 @@ meRouter.get('/me', requireAuth, async (_request, response) => {
         email: user.email ?? null,
         name: user.name,
       })
-      .onDuplicateKeyUpdate({
+      .onConflictDoUpdate({
+        target: users.id,
         set: {
-          email: sql`VALUES(email)`,
-          name: sql`VALUES(name)`,
+          email: sql`excluded.email`,
+          name: sql`excluded.name`,
+          updatedAt: sql`now()`,
         },
       })
 

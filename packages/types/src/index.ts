@@ -8,7 +8,7 @@ import {
   presignResponseSchema,
   uploadSchema,
   uploadsListResponseSchema,
-} from './schemas.js'
+} from './schemas'
 
 export type CurrentUser = z.infer<typeof currentUserSchema>
 export type Upload = z.infer<typeof uploadSchema>
@@ -29,14 +29,14 @@ export {
   uploadSchema,
   uploadStatusSchema,
   uploadsListResponseSchema,
-} from './schemas.js'
+} from './schemas'
 
 export {
   currentUserFromKeycloakClaims,
   parseKeycloakAccessClaims,
   uploadFromDb,
   type DbUploadRow,
-} from './mappers.js'
+} from './mappers'
 
 export function parseMeResponse(body: unknown) {
   return meResponseSchema.parse(body)
