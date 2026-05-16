@@ -1,3 +1,4 @@
+import { KeycloakDirectTransport } from '@fullstack/identity-session'
 import { Router } from 'express'
 import { z } from 'zod'
 import { env } from '../env.js'
@@ -39,16 +40,9 @@ const refreshBodySchema = z.object({
   client_id: z.string().default(MOBILE_CLIENT_ID),
 })
 
-async function postToKeycloakTokenEndpoint(body: URLSearchParams) {
-  const tokenUrl = `${env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`
-  const response = await fetch(tokenUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: body.toString(),
-  })
-  const payload: unknown = await response.json().catch(() => ({}))
-  return { response, payload }
-}
+const keycloakTransport = new KeycloakDirectTransport({
+  issuer: env.KEYCLOAK_ISSUER,
+})
 
 export const authRouter = Router()
 
@@ -70,27 +64,22 @@ authRouter.post('/auth/token', async (request, response) => {
     return
   }
 
-  const params = new URLSearchParams({
-    grant_type: 'authorization_code',
-    client_id,
-    code,
-    redirect_uri,
-    code_verifier,
-  })
-
-  const { response: kcResponse, payload } = await postToKeycloakTokenEndpoint(params)
-  if (!kcResponse.ok) {
-    response.status(kcResponse.status).json(payload)
-    return
+  try {
+    const data = await keycloakTransport.exchangeAuthorizationCode({
+      code,
+      codeVerifier: code_verifier,
+      redirectUri: redirect_uri,
+      clientId: client_id,
+    })
+    response.json({
+      access_token: data.access_token,
+      refresh_token: data.refresh_token,
+      expires_in: data.expires_in,
+      token_type: data.token_type,
+    })
+  } catch (error) {
+    response.status(502).json({ error: (error as Error).message })
   }
-
-  const data = payload as Record<string, unknown>
-  response.json({
-    access_token: data.access_token,
-    refresh_token: data.refresh_token,
-    expires_in: data.expires_in,
-    token_type: data.token_type,
-  })
 })
 
 authRouter.post('/auth/refresh', async (request, response) => {
@@ -106,23 +95,18 @@ authRouter.post('/auth/refresh', async (request, response) => {
     return
   }
 
-  const params = new URLSearchParams({
-    grant_type: 'refresh_token',
-    client_id,
-    refresh_token,
-  })
-
-  const { response: kcResponse, payload } = await postToKeycloakTokenEndpoint(params)
-  if (!kcResponse.ok) {
-    response.status(kcResponse.status).json(payload)
-    return
+  try {
+    const data = await keycloakTransport.refreshAccessToken({
+      refreshToken: refresh_token,
+      clientId: client_id,
+    })
+    response.json({
+      access_token: data.access_token,
+      refresh_token: data.refresh_token,
+      expires_in: data.expires_in,
+      token_type: data.token_type,
+    })
+  } catch (error) {
+    response.status(502).json({ error: (error as Error).message })
   }
-
-  const data = payload as Record<string, unknown>
-  response.json({
-    access_token: data.access_token,
-    refresh_token: data.refresh_token,
-    expires_in: data.expires_in,
-    token_type: data.token_type,
-  })
 })

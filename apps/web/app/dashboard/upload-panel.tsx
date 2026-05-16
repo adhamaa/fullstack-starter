@@ -1,8 +1,10 @@
 'use client'
 
+import { uploadFile } from '@fullstack/api-client'
 import type { Upload } from '@fullstack/types'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
+import { createBffUploadClient } from '../../lib/upload-intake-bff'
 
 export function UploadPanel({ initialUploads }: { initialUploads: Upload[] }) {
   const router = useRouter()
@@ -20,41 +22,22 @@ export function UploadPanel({ initialUploads }: { initialUploads: Upload[] }) {
     setMessage(null)
 
     try {
-      const presignResponse = await fetch('/dashboard/api/presign', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      const completed = await uploadFile(
+        createBffUploadClient(),
+        {
+          file,
           filename: file.name,
           contentType: file.type || 'application/octet-stream',
-          sizeBytes: file.size,
-        }),
-      })
-      if (!presignResponse.ok) {
-        throw new Error(`presign failed: ${presignResponse.status}`)
-      }
-      const presign = (await presignResponse.json()) as {
-        uploadId: string
-        url: string
-        headers: Record<string, string>
-      }
-
-      const putResponse = await fetch(presign.url, {
-        method: 'PUT',
-        headers: presign.headers,
-        body: file,
-      })
-      if (!putResponse.ok) {
-        throw new Error(`upload failed: ${putResponse.status}`)
-      }
-
-      const completeResponse = await fetch(
-        `/dashboard/api/complete?id=${encodeURIComponent(presign.uploadId)}`,
-        { method: 'POST' },
+        },
+        {
+          put: async (url, headers, body) => {
+            const putResponse = await fetch(url, { method: 'PUT', headers, body })
+            if (!putResponse.ok) {
+              throw new Error(`upload failed: ${putResponse.status}`)
+            }
+          },
+        },
       )
-      if (!completeResponse.ok) {
-        throw new Error(`complete failed: ${completeResponse.status}`)
-      }
-      const completed = (await completeResponse.json()) as Upload
 
       setUploads((prev) => [completed, ...prev.filter((row) => row.id !== completed.id)])
       setMessage(`Uploaded ${file.name}`)

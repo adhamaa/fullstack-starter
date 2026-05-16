@@ -28,6 +28,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import { needsRefresh } from '@fullstack/identity-session'
 import { Platform } from 'react-native'
 
 // Popup callback page: allow trailing-slash mismatch between redirect_uri and return URL.
@@ -38,7 +39,6 @@ const CLIENT_ID = process.env.EXPO_PUBLIC_KEYCLOAK_CLIENT_ID ?? 'fullstack-mobil
 const SCHEME = 'fullstackstarter'
 /** Optional override when Keycloak must match a fixed callback (e.g. custom dev port). */
 const REDIRECT_URI_OVERRIDE = process.env.EXPO_PUBLIC_APP_REDIRECT_URI
-const REFRESH_LEEWAY_MS = 30_000
 
 type StoredTokens = {
   accessToken: string
@@ -326,7 +326,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const getAccessToken = useCallback(async () => {
     if (!tokens) return null
-    if (Date.now() < tokens.accessTokenExpiresAt - REFRESH_LEEWAY_MS) {
+    if (!needsRefresh(tokens.accessTokenExpiresAt)) {
       return tokens.accessToken
     }
     if (!tokens.refreshToken) return tokens.accessToken

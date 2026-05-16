@@ -17,7 +17,8 @@ __pycache__
 npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
-infra/data
+infra/data/**
+!infra/data/.gitkeep
 
 # Keycloakify build output (generated locally / in CI)
 packages/keycloak-theme/dist_keycloak

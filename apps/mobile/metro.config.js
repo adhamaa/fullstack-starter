@@ -32,6 +32,7 @@ config.watchFolders = [
   path.resolve(workspaceRoot, 'node_modules'),
   ...linkedPackages.map(packageRoot),
   path.resolve(workspaceRoot, 'packages/api-client'),
+  path.resolve(workspaceRoot, 'packages/identity-session'),
   path.resolve(workspaceRoot, 'packages/types'),
   path.resolve(workspaceRoot, 'packages/config'),
 ]

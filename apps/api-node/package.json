@@ -16,6 +16,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "latest",
     "@aws-sdk/s3-request-presigner": "latest",
+    "@fullstack/identity-session": "workspace:*",
     "@fullstack/types": "workspace:*",
     "@novu/node": "latest",
     "cors": "latest",

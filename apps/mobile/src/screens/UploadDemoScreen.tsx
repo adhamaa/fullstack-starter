@@ -1,4 +1,5 @@
 import type { Upload } from '@fullstack/types'
+import { uploadFile } from '@fullstack/api-client'
 import * as DocumentPicker from 'expo-document-picker'
 import { Link } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
@@ -37,24 +38,25 @@ export function UploadDemoScreen() {
     setMessage(null)
 
     try {
-      const api = makeApi(getAccessToken)
-      const presign = await api.presignUpload({
-        filename: asset.name,
-        contentType: asset.mimeType ?? 'application/octet-stream',
-        sizeBytes: asset.size ?? 0,
-      })
-
       const fileResponse = await fetch(asset.uri)
       const blob = await fileResponse.blob()
+      const contentType = asset.mimeType ?? 'application/octet-stream'
 
-      const putResponse = await fetch(presign.url, {
-        method: 'PUT',
-        headers: presign.headers,
-        body: blob,
-      })
-      if (!putResponse.ok) throw new Error(`upload failed: ${putResponse.status}`)
+      await uploadFile(
+        makeApi(getAccessToken),
+        {
+          file: blob,
+          filename: asset.name,
+          contentType,
+        },
+        {
+          put: async (url, headers, body) => {
+            const putResponse = await fetch(url, { method: 'PUT', headers, body })
+            if (!putResponse.ok) throw new Error(`upload failed: ${putResponse.status}`)
+          },
+        },
+      )
 
-      await api.completeUpload(presign.uploadId)
       setMessage(`Uploaded ${asset.name}`)
       await refresh()
     } catch (error) {

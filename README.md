@@ -89,7 +89,7 @@ More detail: [`infra/keycloak/THEMING.md`](infra/keycloak/THEMING.md)
 
 1. Visit http://localhost:3000 and click **Sign in with Keycloak**.
 2. Use the seeded `demo` / `demo` account (or create one in the `fullstack` realm).
-3. After sign-in you land on `/dashboard`. The page calls `GET /me` (which upserts a row in the `users` table) and `GET /uploads`.
+3. After sign-in you land on `/dashboard`. The page calls `GET /me` (read-only **CurrentUser** from the token) and `GET /uploads`. The first upload presign performs **Profile sync** (upserts `users`).
 4. Click **Upload a file** to PUT a file to MinIO via a presigned URL. The Node API records the row, flips it to `ready`, and triggers the `upload-created` Novu workflow if `NOVU_SECRET_KEY` is set.
 
 ## Sign in (mobile)

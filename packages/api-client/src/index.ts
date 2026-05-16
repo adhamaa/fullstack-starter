@@ -1,10 +1,15 @@
-import type {
-  CurrentUser,
-  DownloadResponse,
-  HealthStatus,
-  PresignRequest,
-  PresignResponse,
-  Upload,
+import {
+  parseDownloadResponse,
+  parseMeResponse,
+  parsePresignResponse,
+  parseUpload,
+  parseUploadsListResponse,
+  type CurrentUser,
+  type DownloadResponse,
+  type HealthStatus,
+  type PresignRequest,
+  type PresignResponse,
+  type Upload,
 } from '@fullstack/types'
 
 export type TokenProvider = () => string | null | undefined | Promise<string | null | undefined>
@@ -34,10 +39,10 @@ export function createApiClient({ baseUrl, accessToken, getToken }: ApiClientOpt
     return accessToken
   }
 
-  const request = async <T>(
+  const request = async (
     path: string,
     init: RequestInit & { json?: unknown } = {},
-  ): Promise<T> => {
+  ): Promise<unknown> => {
     const token = await resolveToken()
     const headers = new Headers(init.headers)
     if (token) headers.set('Authorization', `Bearer ${token}`)
@@ -61,25 +66,32 @@ export function createApiClient({ baseUrl, accessToken, getToken }: ApiClientOpt
       throw makeError(response.status, response.statusText, body)
     }
 
-    if (response.status === 204) return undefined as T
-    return (await response.json()) as T
+    if (response.status === 204) return undefined
+    return response.json()
   }
 
   return {
-    health: () => request<HealthStatus>('/health'),
-    flaskHealth: () => request<HealthStatus>('/health/flask'),
-    me: () => request<{ user: CurrentUser }>('/me'),
-    listUploads: () => request<{ uploads: Upload[] }>('/uploads'),
-    presignUpload: (body: PresignRequest) =>
-      request<PresignResponse>('/uploads/presign', {
-        method: 'POST',
-        json: body,
-      }),
-    completeUpload: (uploadId: string) =>
-      request<Upload>(`/uploads/${uploadId}/complete`, { method: 'POST', json: {} }),
-    getDownloadUrl: (uploadId: string) =>
-      request<DownloadResponse>(`/uploads/${uploadId}/download`),
+    health: () => request('/health') as Promise<HealthStatus>,
+    flaskHealth: () => request('/health/flask') as Promise<HealthStatus>,
+    me: async () => parseMeResponse(await request('/me')),
+    listUploads: async () => parseUploadsListResponse(await request('/uploads')),
+    presignUpload: async (body: PresignRequest) =>
+      parsePresignResponse(
+        await request('/uploads/presign', {
+          method: 'POST',
+          json: body,
+        }),
+      ),
+    completeUpload: async (uploadId: string) =>
+      parseUpload(
+        await request(`/uploads/${uploadId}/complete`, { method: 'POST', json: {} }),
+      ),
+    getDownloadUrl: async (uploadId: string) =>
+      parseDownloadResponse(await request(`/uploads/${uploadId}/download`)),
   }
 }
 
 export type ApiClient = ReturnType<typeof createApiClient>
+
+export { uploadFile } from './upload-intake.js'
+export type { UploadFileInput, UploadFileOptions, UploadPutFn } from './upload-intake.js'

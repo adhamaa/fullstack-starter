@@ -1,4 +1,4 @@
-import { proxyAuthenticatedApi } from '../../../../lib/proxy-authenticated-api'
+import { withUploadIntakeApiRoute } from '../../../../lib/upload-intake-bff'
 
 export async function POST(request: Request) {
   const id = new URL(request.url).searchParams.get('id')
@@ -6,5 +6,5 @@ export async function POST(request: Request) {
     return Response.json({ error: 'missing_id' }, { status: 400 })
   }
 
-  return proxyAuthenticatedApi((api) => api.completeUpload(id))
+  return withUploadIntakeApiRoute((api) => api.completeUpload(id))
 }

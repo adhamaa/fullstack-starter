@@ -1,3 +1,8 @@
+import {
+  KeycloakDirectTransport,
+  needsRefresh,
+  refreshAccessToken,
+} from '@fullstack/identity-session'
 import NextAuth, { type DefaultSession } from 'next-auth'
 import Keycloak from 'next-auth/providers/keycloak'
 
@@ -22,36 +27,10 @@ const keycloakIssuer = process.env.KEYCLOAK_ISSUER ?? 'http://localhost:8080/rea
 const keycloakClientId = process.env.KEYCLOAK_CLIENT_ID ?? 'fullstack-web'
 const keycloakClientSecret = process.env.KEYCLOAK_CLIENT_SECRET ?? 'fullstack-web-dev-secret'
 
-async function refreshAccessToken(refreshToken: string) {
-  const response = await fetch(`${keycloakIssuer}/protocol/openid-connect/token`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({
-      grant_type: 'refresh_token',
-      refresh_token: refreshToken,
-      client_id: keycloakClientId,
-      client_secret: keycloakClientSecret,
-    }),
-    cache: 'no-store',
-  })
-
-  const refreshed = (await response.json()) as {
-    access_token?: string
-    refresh_token?: string
-    expires_in?: number
-    error?: string
-  }
-
-  if (!response.ok || !refreshed.access_token) {
-    throw new Error(refreshed.error ?? 'failed_to_refresh_keycloak_token')
-  }
-
-  return {
-    accessToken: refreshed.access_token,
-    refreshToken: refreshed.refresh_token ?? refreshToken,
-    accessTokenExpires: Date.now() + (refreshed.expires_in ?? 60) * 1000,
-  }
-}
+const keycloakTransport = new KeycloakDirectTransport({
+  issuer: keycloakIssuer,
+  clientSecret: keycloakClientSecret,
+})
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
@@ -102,7 +81,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       if (
         typeof current.accessTokenExpires === 'number' &&
-        Date.now() < current.accessTokenExpires - 30_000
+        !needsRefresh(current.accessTokenExpires)
       ) {
         return current
       }
@@ -119,8 +98,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
 
       try {
-        const refreshed = await refreshAccessToken(current.refreshToken)
-        return { ...current, ...refreshed, error: undefined } satisfies AuthToken
+        const refreshed = await refreshAccessToken(keycloakTransport, {
+          refreshToken: current.refreshToken,
+          clientId: keycloakClientId,
+        })
+        return {
+          ...current,
+          accessToken: refreshed.accessToken,
+          refreshToken: refreshed.refreshToken ?? current.refreshToken,
+          accessTokenExpires: refreshed.accessTokenExpiresAt,
+          error: undefined,
+        } satisfies AuthToken
       } catch (error) {
         console.warn('[auth] refresh failed:', (error as Error).message)
         return {

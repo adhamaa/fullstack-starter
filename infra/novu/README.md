@@ -15,7 +15,7 @@ The full self-hosted Novu stack has several moving parts and is best added after
 
 When `NOVU_SECRET_KEY` is set, `apps/api-node` automatically:
 
-- Calls `subscribers.identify` for each authenticated user the first time they hit `/me`. The `subscriberId` is the Keycloak `sub` (UUID).
+- Calls `subscribers.identify` at Upload intake presign (idempotent per subject). The `subscriberId` is the Keycloak `sub` (UUID).
 - Triggers a workflow when `POST /uploads/:id/complete` succeeds.
 
 ### Workflow: `upload-created`
