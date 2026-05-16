@@ -34,10 +34,20 @@
       "enabled": true,
       "protocol": "openid-connect",
       "publicClient": true,
+      "standardFlowEnabled": true,
+      "fullScopeAllowed": true,
       "attributes": {
         "login_theme": "fullstack-mobile-default"
       },
-      "redirectUris": ["fullstackstarter://*", "exp://*"],
+      "optionalClientScopes": ["offline_access"],
+      "redirectUris": [
+        "fullstackstarter://*",
+        "exp://*",
+        "http://localhost:8081",
+        "http://localhost:8081/*",
+        "http://127.0.0.1:8081",
+        "http://127.0.0.1:8081/*"
+      ],
       "webOrigins": ["*"]
     }
   ],

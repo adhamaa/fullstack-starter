@@ -1,3 +1,4 @@
+import '../src/auth/bootstrap'
 import '../global.css'
 import { Stack } from 'expo-router'
 import { AuthProvider } from '../src/auth/AuthContext'

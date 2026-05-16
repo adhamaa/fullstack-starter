@@ -94,9 +94,11 @@ More detail: [`infra/keycloak/THEMING.md`](infra/keycloak/THEMING.md)
 
 ## Sign in (mobile)
 
-1. Run `pnpm dev:mobile` and open the app in Expo Go or a dev build.
+1. Run `pnpm dev:mobile` and open the app in Expo Go or a dev build (press `w` for web at http://localhost:8081).
 2. Tap **Sign in with Keycloak** — the system browser opens the realm's login page (PKCE flow).
-3. After sign-in tokens are stored in `expo-secure-store` and the home screen calls `GET /me`. Tap **Upload demo** to upload a file via presigned URL.
+3. After sign-in tokens are stored (`expo-secure-store` on native, `localStorage` on web) and the home screen calls `GET /me`. Tap **Upload demo** to upload a file via presigned URL.
+
+**Expo web + Keycloak:** On web, the OAuth `redirect_uri` is `http://localhost:8081` (not `fullstackstarter://`). The auth code is exchanged via `POST /auth/token` on the Node API (avoids browser CORS to Keycloak on :8080). If Keycloak shows *Invalid parameter: redirect_uri*, add that URI to the `fullstack-mobile` client (already in `fullstack-realm.json` for fresh imports). Include `fullstack-mobile` in `KEYCLOAK_AUDIENCE` so `/me` accepts mobile tokens.
 
 ## Keycloak Defaults
 
@@ -106,7 +108,7 @@ More detail: [`infra/keycloak/THEMING.md`](infra/keycloak/THEMING.md)
 - Demo user: `demo`
 - Demo password: `demo`
 - Web client: `fullstack-web` (confidential, secret `fullstack-web-dev-secret`)
-- Mobile client: `fullstack-mobile` (public, PKCE, redirects `fullstackstarter://*`)
+- Mobile client: `fullstack-mobile` (public, PKCE; native `fullstackstarter://*`, Expo Go `exp://*`, web `http://localhost:8081/*`)
 - API audience/client: `fullstack-api`
 
 The Node API verifies bearer tokens against the realm in `apps/api-node/src/integrations/keycloak.ts`. Realm config lives in `infra/keycloak/fullstack-realm.json` and is auto-imported on first startup. To re-import after changing the realm JSON, stop compose and delete `infra/data/postgres/` (or edit the client in the admin UI instead).

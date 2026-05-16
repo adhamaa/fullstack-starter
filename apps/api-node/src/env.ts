@@ -34,7 +34,7 @@ const envSchema = z.object({
   NOVU_SECRET_KEY: z.string().optional(),
   KEYCLOAK_ISSUER: z.string().url().default('http://localhost:8080/realms/fullstack'),
   // Comma-separated list of accepted audiences (e.g. "fullstack-web,fullstack-api").
-  KEYCLOAK_AUDIENCE: z.string().default('fullstack-web,fullstack-api'),
+  KEYCLOAK_AUDIENCE: z.string().default('fullstack-web,fullstack-api,fullstack-mobile'),
 })
 
 export const env = envSchema.parse(process.env)

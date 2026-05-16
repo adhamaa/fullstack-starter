@@ -5,6 +5,7 @@ import { checkDatabase } from './integrations/postgres.js'
 import { getNovuStatus } from './integrations/novu.js'
 import { checkRedis } from './integrations/redis.js'
 import { checkS3 } from './integrations/s3.js'
+import { authRouter } from './routes/auth.js'
 import { meRouter } from './routes/me.js'
 import { uploadsRouter } from './routes/uploads.js'
 
@@ -49,6 +50,7 @@ app.get('/health/flask', async (_request, response) => {
   response.status(flaskResponse.status).json(await flaskResponse.json())
 })
 
+app.use(authRouter)
 app.use(meRouter)
 app.use(uploadsRouter)
 
