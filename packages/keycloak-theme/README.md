@@ -1,23 +1,42 @@
 # `@fullstack/keycloak-theme`
 
-Keycloakify project that builds **login + account + email** themes for Keycloak **26.x**.
+Keycloakify login theme based on [keycloakify-shadcn-starter](https://github.com/Oussemasahbeni/keycloakify-shadcn-starter) (shadcn/ui + Tailwind v4). See the [Keycloakify shadcn docs](https://docs.keycloakify.dev/starter-themes/shadcn-ui-tailwind).
 
-## Build output
+## Theme variants
 
-Running `pnpm build` in this package will:
+Four login themes are built (web/mobile × default/ramadan):
 
-- Build the Vite bundle
-- Run `keycloakify build`
-- Copy/prune themes into `infra/keycloak/themes/` for local Docker mounting
+- `fullstack-web-default`
+- `fullstack-web-ramadan`
+- `fullstack-mobile-default`
+- `fullstack-mobile-ramadan`
 
-Repo root shortcut:
+Account UI still uses the Keycloakify default account theme. Email templates are built with `keycloakify-emails`.
+
+## Development
+
+```bash
+# Fast UI loop (mock Keycloak context, HMR)
+pnpm dev:keycloak-theme
+# → http://localhost:5173
+
+# Storybook (all login pages + toolbar controls)
+pnpm storybook:keycloak-theme
+# → http://localhost:6006
+
+# Preview email templates
+pnpm --filter @fullstack/keycloak-theme emails:preview
+```
+
+Customize branding via `SHADCN_THEME_*` env vars in `vite.config.ts` (see starter README for presets, layouts, fonts).
+
+## Build & deploy to local Docker
 
 ```bash
 pnpm build:keycloak-theme
+pnpm infra:up
 ```
 
-## Notes
+Output is copied to `infra/keycloak/themes/` for the compose volume mount.
 
-- **Theme variants** are configured via `themeName: [...]` in `vite.config.ts` and are available as `kcContext.themeName` in React.
-- **Seasonal variants** are implemented as token overrides in `src/theme/variants.ts`.
-- **Base theme**: `theme.properties` is normalized during the copy step to start from **`parent=keycloak.v2`** (see `scripts/extract-themes.mjs`).
+More: [`infra/keycloak/THEMING.md`](../../infra/keycloak/THEMING.md)
