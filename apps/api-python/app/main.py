@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from flask import Flask, jsonify
 from flask_cors import CORS
-from .services import check_mysql, check_redis
+from .services import check_database, check_redis
 
 
 def create_app() -> Flask:
@@ -11,7 +11,7 @@ def create_app() -> Flask:
     @app.get("/health")
     def health():
         dependencies = {
-            "mysql": "ok" if check_mysql() else "error",
+            "database": "ok" if check_database() else "error",
             "redis": "ok" if check_redis() else "error",
         }
 

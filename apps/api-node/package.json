@@ -24,7 +24,7 @@
     "express": "latest",
     "ioredis": "latest",
     "jose": "latest",
-    "mysql2": "latest",
+    "pg": "latest",
     "uuid": "latest",
     "zod": "latest"
   },
@@ -32,6 +32,7 @@
     "vitest": "latest",
     "@types/cors": "latest",
     "@types/express": "latest",
+    "@types/pg": "latest",
     "@types/node": "latest",
     "@types/uuid": "latest",
     "drizzle-kit": "latest",

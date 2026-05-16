@@ -6,7 +6,7 @@ A Turborepo starter for:
 - Expo mobile app (Expo Router, expo-auth-session + Keycloak PKCE, NativeWind v4 / Tailwind v3)
 - Node.js API (Express + Drizzle ORM + S3 presigned uploads + Novu)
 - Flask API (health-only, ready to extend)
-- MySQL
+- PostgreSQL
 - Redis
 - MinIO as local S3-compatible storage
 - Novu notification integration (optional)
@@ -109,11 +109,11 @@ More detail: [`infra/keycloak/THEMING.md`](infra/keycloak/THEMING.md)
 - Mobile client: `fullstack-mobile` (public, PKCE, redirects `fullstackstarter://*`)
 - API audience/client: `fullstack-api`
 
-The Node API verifies bearer tokens against the realm in `apps/api-node/src/integrations/keycloak.ts`. Realm config lives in `infra/keycloak/fullstack-realm.json` and is auto-imported on first startup. To re-import after changing the realm JSON, stop compose and delete `infra/data/keycloak-mysql/` (or edit the client in the admin UI instead).
+The Node API verifies bearer tokens against the realm in `apps/api-node/src/integrations/keycloak.ts`. Realm config lives in `infra/keycloak/fullstack-realm.json` and is auto-imported on first startup. To re-import after changing the realm JSON, stop compose and delete `infra/data/postgres/` (or edit the client in the admin UI instead).
 
 ## Database migrations
 
-Drizzle ORM owns the MySQL schema (`apps/api-node/src/db/schema/*`).
+Drizzle ORM owns the PostgreSQL schema (`apps/api-node/src/db/schema/*`).
 
 ```bash
 # Edit a schema file, then:

@@ -1,19 +1,12 @@
-import mysql.connector
+import psycopg
 from redis import Redis
 from .settings import settings
 
 
-def check_mysql() -> bool:
+def check_database() -> bool:
     try:
-        connection = mysql.connector.connect(
-            host=settings.mysql_host,
-            port=settings.mysql_port,
-            database=settings.mysql_database,
-            user=settings.mysql_user,
-            password=settings.mysql_password,
-            connection_timeout=2,
-        )
-        connection.close()
+        with psycopg.connect(settings.database_url, connect_timeout=2) as connection:
+            connection.execute("SELECT 1")
         return True
     except Exception:
         return False

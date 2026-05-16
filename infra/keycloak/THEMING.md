@@ -32,9 +32,9 @@ Alternatively install Temurin JDK 21 + Maven globally and ensure `JAVA_HOME` is 
 
 - `infra/keycloak/themes` → `/opt/keycloak/themes`
 
-### Keycloak keeps restarting (Liquibase / MySQL)
+### Keycloak keeps restarting (Liquibase / PostgreSQL)
 
-If logs show **`Duplicate column name`** or other migration errors, the **Keycloak MySQL data directory** is usually in a bad state (e.g. interrupted upgrade). For **local dev**, stop `keycloak` and `keycloak-db`, delete **`infra/data/keycloak-mysql`**, then start the stack again so Keycloak can run migrations on a clean database (realm JSON will re-import).
+If logs show **`Duplicate column name`** or other migration errors, the **PostgreSQL data directory** is usually in a bad state (e.g. interrupted upgrade). For **local dev**, stop compose, delete **`infra/data/postgres`**, then start the stack again so Keycloak can run migrations on a clean database (realm JSON will re-import).
 
 ## Theme variants
 

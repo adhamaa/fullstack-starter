@@ -8,11 +8,10 @@ load_dotenv()
 @dataclass(frozen=True)
 class Settings:
     flask_port: int = int(getenv("FLASK_PORT", "5000"))
-    mysql_host: str = getenv("MYSQL_HOST", "localhost")
-    mysql_port: int = int(getenv("MYSQL_PORT", "3306"))
-    mysql_database: str = getenv("MYSQL_DATABASE", "app_db")
-    mysql_user: str = getenv("MYSQL_USER", "app")
-    mysql_password: str = getenv("MYSQL_PASSWORD", "app_password")
+    database_url: str = getenv(
+        "DATABASE_URL",
+        "postgresql://app:app_password@localhost:5432/app_db",
+    )
     redis_url: str = getenv("REDIS_URL", "redis://localhost:6379")
 
 

@@ -27,3 +27,7 @@ Lifecycle for user files: presign → PUT to object storage → complete → lis
 ## API contract
 
 HTTP JSON shapes shared by `@fullstack/types`, `@fullstack/api-client`, and `api-node`. Schemas are the test surface; handlers serialize through `uploadFromDb` and claim mappers rather than ad-hoc objects.
+
+## Flagged ambiguities
+
+- **Database** was used to mean both application persistence (`users`, `uploads` via api-node) and Keycloak’s internal identity store — resolved: the PostgreSQL migration includes **both** datastores.

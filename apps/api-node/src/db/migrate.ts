@@ -1,17 +1,16 @@
-import { drizzle } from 'drizzle-orm/mysql2'
-import { migrate } from 'drizzle-orm/mysql2/migrator'
-import mysql from 'mysql2/promise'
+import { drizzle } from 'drizzle-orm/node-postgres'
+import { migrate } from 'drizzle-orm/node-postgres/migrator'
+import pg from 'pg'
 import { env } from '../env.js'
 
 async function run() {
-  const connection = await mysql.createConnection(env.DATABASE_URL)
-  const db = drizzle(connection)
+  const pool = new pg.Pool({ connectionString: env.DATABASE_URL })
 
   console.log('Running migrations against', env.DATABASE_URL.replace(/:[^:@/]*@/, ':***@'))
-  await migrate(db, { migrationsFolder: './drizzle' })
+  await migrate(drizzle(pool), { migrationsFolder: './drizzle' })
   console.log('Migrations complete')
 
-  await connection.end()
+  await pool.end()
 }
 
 run().catch((error) => {

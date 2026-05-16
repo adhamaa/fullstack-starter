@@ -1,7 +1,7 @@
 import cors from 'cors'
 import express from 'express'
 import { env } from './env.js'
-import { checkMySql } from './integrations/mysql.js'
+import { checkDatabase } from './integrations/postgres.js'
 import { getNovuStatus } from './integrations/novu.js'
 import { checkRedis } from './integrations/redis.js'
 import { checkS3 } from './integrations/s3.js'
@@ -24,7 +24,7 @@ async function dependencyStatus(check: () => Promise<void>) {
 
 app.get('/health', async (_request, response) => {
   const dependencies = {
-    mysql: await dependencyStatus(checkMySql),
+    database: await dependencyStatus(checkDatabase),
     redis: await dependencyStatus(checkRedis),
     s3: await dependencyStatus(checkS3),
     novu: getNovuStatus(),
