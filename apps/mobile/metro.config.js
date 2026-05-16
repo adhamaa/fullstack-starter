@@ -73,13 +73,30 @@ finalConfig.resolver.resolveRequest = (context, moduleName, platform) => {
     }
   }
 
+  let metroError
   try {
     return resolve(context, moduleName, platform)
-  } catch {
+  } catch (error) {
+    metroError = error
+  }
+
+  try {
     const filePath = require.resolve(moduleName, {
       paths: [path.dirname(context.originModulePath), ...resolveRoots],
     })
     return { type: 'sourceFile', filePath }
+  } catch (nodeError) {
+    const origin = context.originModulePath ?? '(unknown)'
+    const metroMessage =
+      metroError instanceof Error ? metroError.message : String(metroError)
+    const nodeMessage =
+      nodeError instanceof Error ? nodeError.message : String(nodeError)
+    throw new Error(
+      `Unable to resolve module "${moduleName}" from "${origin}"\n` +
+        `  metro-resolver: ${metroMessage}\n` +
+        `  require.resolve: ${nodeMessage}`,
+      { cause: metroError ?? nodeError },
+    )
   }
 }
 
