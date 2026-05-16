@@ -67,6 +67,7 @@ export function TemplateContent(props: TemplateContentProps) {
                     readOnly
                     value={auth.attemptedUsername ?? ""}
                     aria-readonly="true"
+                    disabled
                 />
                 <InputGroupAddon align="inline-end">
                     <TooltipProvider>

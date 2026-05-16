@@ -10,8 +10,13 @@ if (!rootElement) {
 }
 
 const kcContext = getKcContextMock({
-    pageId: "login.ftl",
-    overrides: {}
+    pageId: "login-password.ftl",
+    overrides: {
+        auth: {
+            showUsername: true,
+            attemptedUsername: "demo"
+        }
+    }
 });
 
 createRoot(rootElement).render(
