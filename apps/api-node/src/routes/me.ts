@@ -25,6 +25,7 @@ meRouter.get('/me', requireAuth, async (_request, response) => {
         set: {
           email: sql`excluded.email`,
           name: sql`excluded.name`,
+          updatedAt: sql`now()`,
         },
       })
 
