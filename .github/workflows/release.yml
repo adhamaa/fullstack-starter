@@ -106,4 +106,7 @@ jobs:
           "
           pnpm --filter @adhamaa/create-fullstack build
           cd packages/create-fullstack
-          npm publish --provenance --access public
+          # npm publish --provenance --access public
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
