@@ -1,0 +1,35 @@
+{
+  "name": "@adhamaa/create-fullstack",
+  "version": "0.0.0",
+  "description": "Scaffold a new project from the fullstack-starter template",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "create-fullstack": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsup",
+    "lint": "biome check .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.10.0",
+    "giget": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "tsup": "latest",
+    "typescript": "latest",
+    "vitest": "latest"
+  }
+}

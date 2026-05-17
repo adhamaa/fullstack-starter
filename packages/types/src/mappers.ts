@@ -1,9 +1,5 @@
 import type { z } from 'zod'
-import {
-  currentUserSchema,
-  keycloakAccessClaimsSchema,
-  uploadSchema,
-} from './schemas'
+import { currentUserSchema, keycloakAccessClaimsSchema, uploadSchema } from './schemas.js'
 
 type KeycloakAccessClaims = z.infer<typeof keycloakAccessClaimsSchema>
 

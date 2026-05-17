@@ -13,6 +13,40 @@ A Turborepo starter for:
 - Keycloak authentication
 - Keycloakify themes (login/account/email) — see [`infra/keycloak/THEMING.md`](infra/keycloak/THEMING.md)
 
+## Create a new project
+
+Pick one of these ways to start from this template:
+
+### npx (recommended)
+
+Downloads the starter at the same semver as the published CLI (Git tag `v*` on this repo):
+
+```bash
+npx @adhamaa/create-fullstack@latest my-app
+cd my-app
+```
+
+The CLI copies `.env.example` → `.env` and the web/mobile env examples, removes `.git`, and prints first-run commands.
+
+### degit
+
+```bash
+npx degit adhamaa/fullstack-starter my-app
+cd my-app
+cp .env.example .env
+cp apps/web/.env.local.example apps/web/.env.local
+cp apps/mobile/.env.example apps/mobile/.env
+```
+
+Pin a release: `npx degit adhamaa/fullstack-starter#v1.0.0 my-app`
+
+### GitHub template
+
+1. On GitHub: **Settings → General → Template repository** (enable once for this repo).
+2. Click **Use this template → Create a new repository** on the repo page.
+
+Then clone your new repo and follow [First Run](#first-run) below.
+
 ## Requirements
 
 - Node.js with Corepack
@@ -162,3 +196,17 @@ python apps/api-python/run.py
 ```
 
 On macOS/Linux, use `source apps/api-python/.venv/bin/activate` instead.
+
+## Releasing
+
+Canonical versions are **Git tags** `v*` (semver). The npm package `@adhamaa/create-fullstack` uses the same version and downloads that tag.
+
+1. Update `CHANGELOG.md` (move items from **Unreleased** into a new `## x.y.z` section).
+2. Commit, then tag: `git tag v1.0.0 && git push origin v1.0.0`
+3. The [Release workflow](.github/workflows/release.yml) runs CI, opens a GitHub Release (notes from `CHANGELOG.md` when present), and publishes the CLI to npm.
+
+**Maintainer setup (one-time):**
+
+- GitHub **Settings → General → Template repository** — enable so users can use **Use this template**.
+- GitHub repo secret **`NPM_TOKEN`** — npm access token with publish rights for `@adhamaa` (Automation or Granular Access Token). Required for the publish job.
+- npm: ensure you own the `@adhamaa` scope and the package name `@adhamaa/create-fullstack` is available (or adjust `packages/create-fullstack/package.json` before the first publish).

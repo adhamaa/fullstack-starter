@@ -3,8 +3,8 @@ import {
   endIdentitySession,
   IDENTITY_SESSION_END_WARNING,
   keycloakBrowserLogoutUrl,
-} from './session-end'
-import type { SessionEndTransport } from './transport'
+} from './session-end.js'
+import type { SessionEndTransport } from './transport.js'
 
 function mockTransport(overrides?: Partial<SessionEndTransport>): SessionEndTransport {
   return {

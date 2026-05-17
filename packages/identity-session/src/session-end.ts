@@ -1,4 +1,4 @@
-import type { SessionEndTransport } from './transport'
+import type { SessionEndTransport } from './transport.js'
 
 export const IDENTITY_SESSION_END_WARNING =
   'Signed out on this device. Remote session revoke may have failed.'
