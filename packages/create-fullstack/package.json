@@ -6,10 +6,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/adhamaa/fullstack-starter.git"
+    "url": "git+https://github.com/adhamaa/fullstack-starter.git"
   },
   "bin": {
-    "create-fullstack": "./dist/index.js"
+    "create-fullstack": "dist/index.js"
   },
   "files": [
     "dist"
