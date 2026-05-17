@@ -30,9 +30,7 @@ export interface SessionEndTransport {
 }
 
 export interface TokenEndpointTransport {
-  exchangeAuthorizationCode(
-    params: ExchangeAuthorizationCodeParams,
-  ): Promise<OAuthTokenResponse>
+  exchangeAuthorizationCode(params: ExchangeAuthorizationCodeParams): Promise<OAuthTokenResponse>
   refreshAccessToken(params: RefreshAccessTokenParams): Promise<OAuthTokenResponse>
 }
 

@@ -58,9 +58,7 @@ export const healthStatusSchema = z.object({
   service: z.string(),
   status: z.enum(['ok', 'degraded']),
   timestamp: z.string().datetime(),
-  dependencies: z
-    .record(z.string(), z.enum(['ok', 'missing', 'error']))
-    .optional(),
+  dependencies: z.record(z.string(), z.enum(['ok', 'missing', 'error'])).optional(),
 })
 
 export const keycloakAccessClaimsSchema = z.object({
