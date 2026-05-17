@@ -1,4 +1,5 @@
 import {
+  endIdentitySession,
   KeycloakDirectTransport,
   needsRefresh,
   refreshAccessToken,
@@ -44,24 +45,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   events: {
     async signOut(message) {
       const token = (message as { token?: AuthToken }).token
-      const refreshToken = token?.refreshToken
-
-      // Best-effort Keycloak session termination. If this fails, we still sign out locally.
-      if (!refreshToken) return
-
-      try {
-        await fetch(`${keycloakIssuer}/protocol/openid-connect/logout`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams({
-            client_id: keycloakClientId,
-            client_secret: keycloakClientSecret,
-            refresh_token: refreshToken,
-          }),
-          cache: 'no-store',
-        })
-      } catch (error) {
-        console.warn('[auth] keycloak logout failed:', (error as Error).message)
+      const result = await endIdentitySession(keycloakTransport, {
+        clientId: keycloakClientId,
+        refreshToken: token?.refreshToken,
+        endIdpSession: true,
+      })
+      if (result.warning) {
+        console.warn('[auth] identity session end:', result.warning)
       }
     },
   },

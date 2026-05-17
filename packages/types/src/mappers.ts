@@ -7,7 +7,8 @@ import {
 
 type KeycloakAccessClaims = z.infer<typeof keycloakAccessClaimsSchema>
 
-export type DbUploadRow = {
+/** Row shape for `uploads` table rows passed into `uploadFromDb`. */
+export type UploadDbRow = {
   id: string
   userId: string
   key: string
@@ -19,11 +20,14 @@ export type DbUploadRow = {
   updatedAt: Date | string
 }
 
+/** @deprecated Use `UploadDbRow`. */
+export type DbUploadRow = UploadDbRow
+
 function toIsoString(value: Date | string): string {
   return value instanceof Date ? value.toISOString() : value
 }
 
-export function uploadFromDb(row: DbUploadRow) {
+export function uploadFromDb(row: UploadDbRow) {
   return uploadSchema.parse({
     id: row.id,
     userId: row.userId,

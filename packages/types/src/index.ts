@@ -36,6 +36,7 @@ export {
   parseKeycloakAccessClaims,
   uploadFromDb,
   type DbUploadRow,
+  type UploadDbRow,
 } from './mappers'
 
 export function parseMeResponse(body: unknown) {

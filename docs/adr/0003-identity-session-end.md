@@ -13,7 +13,7 @@ Web and mobile ended sign-in differently: Next.js called Keycloak’s logout end
 - **Minimum (all clients):** **Identity session end** clears local tokens/session and revokes the refresh token when one exists. Access tokens may remain valid until expiry.
 - **Failed revoke:** Always complete local sign-out. Surface a non-blocking warning if refresh revocation fails (shared-device honesty). Callers may use `{ localCleared: true, refreshRevoked: boolean }` from a future `identity-session` helper.
 - **IdP session end (optional layer):** Web (confidential client) continues best-effort Keycloak logout after local clear + revoke. Mobile native: revoke + local only. Expo web: revoke + local + best-effort IdP browser session end when sign-in used a browser.
-- **Implementation timing:** Consolidation lives in `packages/identity-session` v2 (transport seam); v1 remains exchange/refresh only (see ADR-0001 follow-on).
+- **Implementation:** `endIdentitySession` in `@fullstack/identity-session` with transport-backed revoke and optional **IdP session end** (see package `session-end.ts`).
 
 ## Considered options
 
@@ -23,6 +23,6 @@ Web and mobile ended sign-in differently: Next.js called Keycloak’s logout end
 
 ## Consequences
 
-- `identity-session` v2 should expose `endIdentitySession` with transport-backed revoke and optional `endIdpSession` (true for web and Expo web, false for native by default).
+- `endIdentitySession` is implemented; adapters pass `endIdpSession: true` on web and Expo web.
 - Web keeps NextAuth `signOut` + Keycloak logout in the adapter; mobile web gains a browser logout step aligned with web.
 - Tests should cover: revoke success, revoke failure with local still cleared, and platform flags for IdP session end.

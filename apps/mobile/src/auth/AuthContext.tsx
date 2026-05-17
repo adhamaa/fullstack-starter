@@ -3,7 +3,6 @@ import {
   exchangeCodeAsync,
   makeRedirectUri,
   refreshAsync,
-  revokeAsync,
   useAuthRequest,
   useAutoDiscovery,
 } from 'expo-auth-session'
@@ -28,8 +27,15 @@ import {
   useRef,
   useState,
 } from 'react'
-import { needsRefresh } from '@fullstack/identity-session'
+import {
+  ApiNodeProxyTransport,
+  endIdentitySession,
+  KeycloakDirectTransport,
+  keycloakBrowserLogoutUrl,
+  needsRefresh,
+} from '@fullstack/identity-session'
 import { Platform } from 'react-native'
+import { apiBaseUrl } from '../lib/api'
 
 // Popup callback page: allow trailing-slash mismatch between redirect_uri and return URL.
 WebBrowser.maybeCompleteAuthSession({ skipRedirectCheck: true })
@@ -39,6 +45,9 @@ const CLIENT_ID = process.env.EXPO_PUBLIC_KEYCLOAK_CLIENT_ID ?? 'fullstack-mobil
 const SCHEME = 'fullstackstarter'
 /** Optional override when Keycloak must match a fixed callback (e.g. custom dev port). */
 const REDIRECT_URI_OVERRIDE = process.env.EXPO_PUBLIC_APP_REDIRECT_URI
+
+const nativeSessionEndTransport = new KeycloakDirectTransport({ issuer: ISSUER })
+const webSessionEndTransport = new ApiNodeProxyTransport({ apiBaseUrl })
 
 type StoredTokens = {
   accessToken: string
@@ -50,6 +59,7 @@ type AuthContextValue = {
   ready: boolean
   signingIn: boolean
   accessToken: string | null
+  signOutWarning: string | null
   signIn: () => Promise<void>
   signOut: () => Promise<void>
   /** Returns the current access token, refreshing first if it is near expiry. */
@@ -106,6 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [tokens, setTokens] = useState<StoredTokens | null>(null)
   const [ready, setReady] = useState(false)
   const [signingIn, setSigningIn] = useState(false)
+  const [signOutWarning, setSignOutWarning] = useState<string | null>(null)
   const handledAuthRef = useRef<string | null>(null)
 
   const [request, response, promptAsync] = useAuthRequest(
@@ -298,6 +309,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return
     }
     stashPendingPkce(request.codeVerifier, request.state, redirectUri)
+    setSignOutWarning(null)
     setSigningIn(true)
     try {
       const result = await promptAsync()
@@ -314,15 +326,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [completeAuthResult, discovery, promptAsync, redirectUri, request, resolveCodeVerifier])
 
   const signOut = useCallback(async () => {
-    if (discovery && tokens?.refreshToken) {
-      try {
-        await revokeAsync({ token: tokens.refreshToken, clientId: CLIENT_ID }, discovery)
-      } catch {
-        // best-effort
-      }
-    }
+    const refreshToken = tokens?.refreshToken
+    const transport =
+      Platform.OS === 'web' ? webSessionEndTransport : nativeSessionEndTransport
+
+    const result = await endIdentitySession(transport, {
+      clientId: CLIENT_ID,
+      refreshToken,
+      endIdpSession: Platform.OS === 'web',
+    })
+
     await updateTokens(null)
-  }, [discovery, tokens, updateTokens])
+    setSignOutWarning(result.warning ?? null)
+
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      const redirect = `${window.location.origin}${window.location.pathname}`
+      window.location.assign(keycloakBrowserLogoutUrl(ISSUER, CLIENT_ID, redirect))
+    }
+  }, [tokens, updateTokens])
 
   const getAccessToken = useCallback(async () => {
     if (!tokens) return null
@@ -366,11 +387,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       ready,
       signingIn,
       accessToken: tokens?.accessToken ?? null,
+      signOutWarning,
       signIn,
       signOut,
       getAccessToken,
     }),
-    [getAccessToken, ready, signIn, signOut, signingIn, tokens],
+    [getAccessToken, ready, signIn, signOut, signOutWarning, signingIn, tokens],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

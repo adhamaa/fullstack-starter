@@ -13,6 +13,14 @@ export {
 } from './tokens.js'
 
 export {
+  endIdentitySession,
+  IDENTITY_SESSION_END_WARNING,
+  keycloakBrowserLogoutUrl,
+  type EndIdentitySessionParams,
+  type EndIdentitySessionResult,
+} from './session-end.js'
+
+export {
   ApiNodeProxyTransport,
   KeycloakDirectTransport,
   type ApiNodeProxyTransportOptions,
@@ -20,6 +28,8 @@ export {
   type KeycloakDirectTransportOptions,
   type OAuthTokenResponse,
   type RefreshAccessTokenParams,
+  type SessionEndParams,
+  type SessionEndTransport,
   type TokenEndpointTransport,
 } from './transport.js'
 

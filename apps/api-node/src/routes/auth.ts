@@ -40,6 +40,11 @@ const refreshBodySchema = z.object({
   client_id: z.string().default(MOBILE_CLIENT_ID),
 })
 
+const sessionEndBodySchema = z.object({
+  refresh_token: z.string().min(1),
+  client_id: z.string().default(MOBILE_CLIENT_ID),
+})
+
 const keycloakTransport = new KeycloakDirectTransport({
   issuer: env.KEYCLOAK_ISSUER,
 })
@@ -106,6 +111,56 @@ authRouter.post('/auth/refresh', async (request, response) => {
       expires_in: data.expires_in,
       token_type: data.token_type,
     })
+  } catch (error) {
+    response.status(502).json({ error: (error as Error).message })
+  }
+})
+
+/** Browser-safe refresh revoke for Expo web. */
+authRouter.post('/auth/revoke', async (request, response) => {
+  const parsed = sessionEndBodySchema.safeParse(request.body)
+  if (!parsed.success) {
+    response.status(400).json({ error: 'invalid_request' })
+    return
+  }
+
+  const { refresh_token, client_id } = parsed.data
+  if (client_id !== MOBILE_CLIENT_ID) {
+    response.status(400).json({ error: 'invalid_client' })
+    return
+  }
+
+  try {
+    await keycloakTransport.revokeRefreshToken({
+      refreshToken: refresh_token,
+      clientId: client_id,
+    })
+    response.status(204).end()
+  } catch (error) {
+    response.status(502).json({ error: (error as Error).message })
+  }
+})
+
+/** Browser-safe Keycloak logout for Expo web SSO cookie. */
+authRouter.post('/auth/logout', async (request, response) => {
+  const parsed = sessionEndBodySchema.safeParse(request.body)
+  if (!parsed.success) {
+    response.status(400).json({ error: 'invalid_request' })
+    return
+  }
+
+  const { refresh_token, client_id } = parsed.data
+  if (client_id !== MOBILE_CLIENT_ID) {
+    response.status(400).json({ error: 'invalid_client' })
+    return
+  }
+
+  try {
+    await keycloakTransport.endIdpSession({
+      refreshToken: refresh_token,
+      clientId: client_id,
+    })
+    response.status(204).end()
   } catch (error) {
     response.status(502).json({ error: (error as Error).message })
   }
