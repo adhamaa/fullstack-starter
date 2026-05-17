@@ -1,53 +1,52 @@
-﻿import { createKcPageStory, type Meta, type StoryObj } from "../../mocks/KcPageStory";
+﻿import { createKcPageStory, type Meta, type StoryObj } from '../../mocks/KcPageStory'
 
-const { KcPageStory } = createKcPageStory({ pageId: "error.ftl" });
+const { KcPageStory } = createKcPageStory({ pageId: 'error.ftl' })
 
 const meta = {
-    title: "login/error.ftl",
-    component: KcPageStory
-} satisfies Meta<typeof KcPageStory>;
+  title: 'login/error.ftl',
+  component: KcPageStory,
+} satisfies Meta<typeof KcPageStory>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
-export const Default: Story = {};
-
+export const Default: Story = {}
 
 export const WithAnotherMessage: Story = {
-    args: {
-        kcContext: {
-            message: { summary: "With another error message" }
-        }
-    }
-};
+  args: {
+    kcContext: {
+      message: { summary: 'With another error message' },
+    },
+  },
+}
 
 export const WithHtmlErrorMessage: Story = {
-    args: {
-        kcContext: {
-            message: {
-                summary:
-                    "<strong>Error:</strong> Something went wrong. <a href='https://example.com'>Go back</a>"
-            }
-        }
-    }
-};
+  args: {
+    kcContext: {
+      message: {
+        summary:
+          "<strong>Error:</strong> Something went wrong. <a href='https://example.com'>Go back</a>",
+      },
+    },
+  },
+}
 export const FrenchError: Story = {
-    args: {
-        kcContext: {
-            locale: { currentLanguageTag: "fr" },
-            message: { summary: "Une erreur s'est produite" }
-        }
-    }
-};
+  args: {
+    kcContext: {
+      locale: { currentLanguageTag: 'fr' },
+      message: { summary: "Une erreur s'est produite" },
+    },
+  },
+}
 export const WithSkipLink: Story = {
-    args: {
-        kcContext: {
-            message: { summary: "An error occurred" },
-            skipLink: true,
-            client: {
-                baseUrl: "https://example.com"
-            }
-        }
-    }
-};
+  args: {
+    kcContext: {
+      message: { summary: 'An error occurred' },
+      skipLink: true,
+      client: {
+        baseUrl: 'https://example.com',
+      },
+    },
+  },
+}

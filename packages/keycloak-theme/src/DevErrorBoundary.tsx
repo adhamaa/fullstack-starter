@@ -28,12 +28,8 @@ export class DevErrorBoundary extends Component<Props, State> {
           }}
         >
           <h1 style={{ marginTop: 0 }}>Theme failed to render</h1>
-          <pre style={{ whiteSpace: 'pre-wrap', color: '#fca5a5' }}>
-            {this.state.error.message}
-          </pre>
-          <p style={{ color: '#a3a3a3' }}>
-            Check the browser console for the full stack trace.
-          </p>
+          <pre style={{ whiteSpace: 'pre-wrap', color: '#fca5a5' }}>{this.state.error.message}</pre>
+          <p style={{ color: '#a3a3a3' }}>Check the browser console for the full stack trace.</p>
         </div>
       )
     }

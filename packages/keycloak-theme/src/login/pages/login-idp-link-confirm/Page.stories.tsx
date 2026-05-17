@@ -1,23 +1,23 @@
-import { createKcPageStory, type Meta, type StoryObj } from "../../mocks/KcPageStory";
+import { createKcPageStory, type Meta, type StoryObj } from '../../mocks/KcPageStory'
 
 // Mock kcContext to avoid the TS2304 error
 const mockKcContext = {
-    url: {
-        loginAction: "/login-action"
-    },
-    idpAlias: "mockIdpAlias"
-};
+  url: {
+    loginAction: '/login-action',
+  },
+  idpAlias: 'mockIdpAlias',
+}
 
-const { KcPageStory } = createKcPageStory({ pageId: "login-idp-link-confirm.ftl" });
+const { KcPageStory } = createKcPageStory({ pageId: 'login-idp-link-confirm.ftl' })
 
 const meta = {
-    title: "login/login-idp-link-confirm.ftl",
-    component: KcPageStory
-} satisfies Meta<typeof KcPageStory>;
+  title: 'login/login-idp-link-confirm.ftl',
+  component: KcPageStory,
+} satisfies Meta<typeof KcPageStory>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
 /**
  * Default:
@@ -26,11 +26,10 @@ type Story = StoryObj<typeof meta>;
  * - Key Aspect: Ensures the default behavior of the component with standard values for kcContext.
  */
 export const Default: Story = {
-    args: {
-        kcContext: mockKcContext
-    }
-};
-
+  args: {
+    kcContext: mockKcContext,
+  },
+}
 
 /**
  * WithFormSubmissionError:
@@ -39,16 +38,16 @@ export const Default: Story = {
  * - Key Aspect: Verifies that the component can display error messages during form submission failure, ensuring proper error handling.
  */
 export const WithFormSubmissionError: Story = {
-    args: {
-        kcContext: {
-            ...mockKcContext,
-            url: {
-                loginAction: "/error"
-            },
-            message: {
-                type: "error",
-                summary: "An error occurred during form submission."
-            }
-        }
-    }
-};
+  args: {
+    kcContext: {
+      ...mockKcContext,
+      url: {
+        loginAction: '/error',
+      },
+      message: {
+        type: 'error',
+        summary: 'An error occurred during form submission.',
+      },
+    },
+  },
+}

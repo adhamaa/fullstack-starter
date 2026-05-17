@@ -26,11 +26,7 @@ export function clearPkceVerifier(state: string) {
   localStorage.removeItem(pkceKey(state))
 }
 
-export function stashPendingPkce(
-  codeVerifier: string,
-  state: string,
-  redirectUri: string,
-) {
+export function stashPendingPkce(codeVerifier: string, state: string, redirectUri: string) {
   if (!canUseWebStorage()) return
   savePkceVerifier(state, codeVerifier)
   localStorage.setItem(PENDING_KEY, JSON.stringify({ codeVerifier, state, redirectUri }))

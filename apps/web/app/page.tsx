@@ -21,8 +21,8 @@ export default async function HomePage() {
         </p>
         <h1 className="mt-4 mb-4 font-extrabold">Next.js + Expo + Node + Flask</h1>
         <p className="text-ink-muted">
-          Local infra is ready for PostgreSQL, Redis, MinIO/S3, Keycloak, and Novu. Start Docker first,
-          then run the apps you need.
+          Local infra is ready for PostgreSQL, Redis, MinIO/S3, Keycloak, and Novu. Start Docker
+          first, then run the apps you need.
         </p>
         <div className="inline-flex mt-6 px-4 py-3 rounded-full bg-bg-muted text-[#bae6fd]">
           Node API: {apiStatus}

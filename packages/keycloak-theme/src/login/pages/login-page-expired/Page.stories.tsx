@@ -1,17 +1,17 @@
-import { createKcPageStory, type Meta, type StoryObj } from "../../mocks/KcPageStory";
+import { createKcPageStory, type Meta, type StoryObj } from '../../mocks/KcPageStory'
 
-const { KcPageStory } = createKcPageStory({ pageId: "login-page-expired.ftl" });
+const { KcPageStory } = createKcPageStory({ pageId: 'login-page-expired.ftl' })
 
 const meta = {
-    title: "login/login-page-expired.ftl",
-    component: KcPageStory
-} satisfies Meta<typeof KcPageStory>;
+  title: 'login/login-page-expired.ftl',
+  component: KcPageStory,
+} satisfies Meta<typeof KcPageStory>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
-export const Default: Story = {};
+export const Default: Story = {}
 
 /**
  * WithErrorMessage:
@@ -20,16 +20,16 @@ export const Default: Story = {};
  * - Key Aspect: Ensures that error messages are displayed correctly in addition to the page expiration notice.
  */
 export const WithErrorMessage: Story = {
-    args: {
-        kcContext: {
-            url: {
-                loginRestartFlowUrl: "/mock-restart-flow",
-                loginAction: "/mock-continue-login"
-            },
-            message: {
-                type: "error",
-                summary: "An error occurred while processing your session."
-            }
-        }
-    }
-};
+  args: {
+    kcContext: {
+      url: {
+        loginRestartFlowUrl: '/mock-restart-flow',
+        loginAction: '/mock-continue-login',
+      },
+      message: {
+        type: 'error',
+        summary: 'An error occurred while processing your session.',
+      },
+    },
+  },
+}

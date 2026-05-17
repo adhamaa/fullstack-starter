@@ -89,12 +89,8 @@
           "name": "uploads_user_id_users_id_fk",
           "tableFrom": "uploads",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -155,10 +151,7 @@
     "public.upload_status": {
       "name": "upload_status",
       "schema": "public",
-      "values": [
-        "pending",
-        "ready"
-      ]
+      "values": ["pending", "ready"]
     }
   },
   "schemas": {},

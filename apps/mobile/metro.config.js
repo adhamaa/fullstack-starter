@@ -37,10 +37,7 @@ config.watchFolders = [
   path.resolve(workspaceRoot, 'packages/config'),
 ]
 
-config.resolver.blockList = [
-  ...(config.resolver.blockList ?? []),
-  /[/\\]infra[/\\].*/,
-]
+config.resolver.blockList = [...(config.resolver.blockList ?? []), /[/\\]infra[/\\].*/]
 
 config.resolver.nodeModulesPaths = [
   path.resolve(projectRoot, 'node_modules'),
@@ -88,10 +85,8 @@ finalConfig.resolver.resolveRequest = (context, moduleName, platform) => {
     return { type: 'sourceFile', filePath }
   } catch (nodeError) {
     const origin = context.originModulePath ?? '(unknown)'
-    const metroMessage =
-      metroError instanceof Error ? metroError.message : String(metroError)
-    const nodeMessage =
-      nodeError instanceof Error ? nodeError.message : String(nodeError)
+    const metroMessage = metroError instanceof Error ? metroError.message : String(metroError)
+    const nodeMessage = nodeError instanceof Error ? nodeError.message : String(nodeError)
     throw new Error(
       `Unable to resolve module "${moduleName}" from "${origin}"\n` +
         `  metro-resolver: ${metroMessage}\n` +

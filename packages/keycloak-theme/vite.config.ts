@@ -1,10 +1,10 @@
-import tailwindcss from '@tailwindcss/vite'
-import react from '@vitejs/plugin-react'
-import { buildEmailTheme } from 'keycloakify-emails'
-import { keycloakify } from 'keycloakify/vite-plugin'
 import { createRequire } from 'node:module'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import tailwindcss from '@tailwindcss/vite'
+import react from '@vitejs/plugin-react'
+import { keycloakify } from 'keycloakify/vite-plugin'
+import { buildEmailTheme } from 'keycloakify-emails'
 import { defineConfig } from 'vite'
 
 const packageDir = path.dirname(fileURLToPath(import.meta.url))

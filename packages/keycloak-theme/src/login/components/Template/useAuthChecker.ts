@@ -1,109 +1,104 @@
-import { useKcContext } from "@/login/KcContext";
-import { useEffect } from "react";
+import { useEffect } from 'react'
+import { useKcContext } from '@/login/KcContext'
 
 // see https://github.com/keycloak/keycloak/blob/main/themes/src/main/resources/theme/base/login/resources/js/authChecker.js
 
-const SESSION_POLLING_INTERVAL_MS = 2000;
-const AUTH_SESSION_TIMEOUT_MS = 1000;
+const SESSION_POLLING_INTERVAL_MS = 2000
+const AUTH_SESSION_TIMEOUT_MS = 1000
 
 function getCookieByName(name: string) {
-    for (const cookie of document.cookie.split(";")) {
-        const [key, value] = cookie.split("=").map(value => value.trim());
-        if (key === name) {
-            return value.startsWith('"') && value.endsWith('"')
-                ? value.slice(1, -1)
-                : value;
-        }
+  for (const cookie of document.cookie.split(';')) {
+    const [key, value] = cookie.split('=').map((value) => value.trim())
+    if (key === name) {
+      return value.startsWith('"') && value.endsWith('"') ? value.slice(1, -1) : value
     }
-    return null;
+  }
+  return null
 }
 
 export function useAuthChecker() {
-    // SSO/session polling only applies inside real Keycloak; in Vite dev it can
-    // redirect away immediately when a KEYCLOAK_SESSION cookie exists locally.
-    if (import.meta.env.DEV) {
-        return;
+  // SSO/session polling only applies inside real Keycloak; in Vite dev it can
+  // redirect away immediately when a KEYCLOAK_SESSION cookie exists locally.
+  if (import.meta.env.DEV) {
+    return
+  }
+
+  const { kcContext } = useKcContext()
+
+  /**
+   * Checks if the current tab's authentication session ID matches the one stored in the browser cookie.
+   *
+   * If the user opens the login page in Tab A, then opens it again in Tab B, the server might generate
+   * a new session ID. Tab A is now "stale". If the user tries to log in on Tab A, it would fail.
+   * This hook detects that mismatch and refreshes the page to get the new ID.
+   */
+  useEffect(() => {
+    if (kcContext.authenticationSession === undefined) {
+      return
     }
 
-    const { kcContext } = useKcContext();
+    const { authSessionIdHash } = kcContext.authenticationSession
 
-    /**
-     * Checks if the current tab's authentication session ID matches the one stored in the browser cookie.
-     *
-     * If the user opens the login page in Tab A, then opens it again in Tab B, the server might generate
-     * a new session ID. Tab A is now "stale". If the user tries to log in on Tab A, it would fail.
-     * This hook detects that mismatch and refreshes the page to get the new ID.
-     */
-    useEffect(() => {
-        if (kcContext.authenticationSession === undefined) {
-            return;
-        }
+    const timer = setTimeout(() => {
+      const authSessionIdHashCookie = getCookieByName('KC_AUTH_SESSION_HASH')
+      // If the cookie exists, but doesn't match the ID in our current HTML/Context
+      if (authSessionIdHashCookie && authSessionIdHashCookie !== authSessionIdHash) {
+        location.reload()
+      }
+    }, AUTH_SESSION_TIMEOUT_MS)
 
-        const { authSessionIdHash } = kcContext.authenticationSession;
+    return () => clearTimeout(timer)
+  }, [kcContext.authenticationSession])
 
-        const timer = setTimeout(() => {
-            const authSessionIdHashCookie = getCookieByName("KC_AUTH_SESSION_HASH");
-            // If the cookie exists, but doesn't match the ID in our current HTML/Context
-            if (
-                authSessionIdHashCookie &&
-                authSessionIdHashCookie !== authSessionIdHash
-            ) {
-                location.reload();
-            }
-        }, AUTH_SESSION_TIMEOUT_MS);
+  /**
+   * Polls for a valid KEYCLOAK_SESSION cookie every few seconds.
+   *
+   * If the user leaves this tab open and logs into the app via a different tab (SSO),
+   * this hook detects the new session and automatically redirects this tab to the success URL.
+   */
+  useEffect(() => {
+    const keycloakSessionCookie = () => getCookieByName('KEYCLOAK_SESSION')
 
-        return () => clearTimeout(timer);
-    }, []);
+    // If we already have a session upon loading, do nothing
+    if (keycloakSessionCookie() !== null) {
+      return
+    }
 
-    /**
-     * Polls for a valid KEYCLOAK_SESSION cookie every few seconds.
-     *
-     * If the user leaves this tab open and logs into the app via a different tab (SSO),
-     * this hook detects the new session and automatically redirects this tab to the success URL.
-     */
-    useEffect(() => {
-        const keycloakSessionCookie = () => getCookieByName("KEYCLOAK_SESSION");
+    let timer: ReturnType<typeof setTimeout>
 
-        // If we already have a session upon loading, do nothing
-        if (keycloakSessionCookie() !== null) {
-            return;
-        }
+    const poll = () => {
+      if (keycloakSessionCookie() === null) {
+        // No session yet, check again in 2 seconds
+        timer = setTimeout(poll, SESSION_POLLING_INTERVAL_MS)
+        return
+      }
 
-        let timer: ReturnType<typeof setTimeout>;
+      location.href = kcContext.url.ssoLoginInOtherTabsUrl
+    }
 
-        const poll = () => {
-            if (keycloakSessionCookie() === null) {
-                // No session yet, check again in 2 seconds
-                timer = setTimeout(poll, SESSION_POLLING_INTERVAL_MS);
-                return;
-            }
+    const handleFormSubmit = () => {
+      clearTimeout(timer)
+    }
 
-            location.href = kcContext.url.ssoLoginInOtherTabsUrl;
-        };
+    const handleBeforeUnload = () => {
+      clearTimeout(timer)
+    }
 
-        const handleFormSubmit = () => {
-            clearTimeout(timer);
-        };
+    const forms = Array.from(document.forms)
+    forms.forEach((form) => {
+      form.addEventListener('submit', handleFormSubmit)
+    })
 
-        const handleBeforeUnload = () => {
-            clearTimeout(timer);
-        };
+    globalThis.addEventListener('beforeunload', handleBeforeUnload)
 
-        const forms = Array.from(document.forms);
-        forms.forEach(form => {
-            form.addEventListener("submit", handleFormSubmit);
-        });
+    poll()
 
-        globalThis.addEventListener("beforeunload", handleBeforeUnload);
-
-        poll();
-
-        return () => {
-            clearTimeout(timer);
-            forms.forEach(form => {
-                form.removeEventListener("submit", handleFormSubmit);
-            });
-            globalThis.removeEventListener("beforeunload", handleBeforeUnload);
-        };
-    }, []);
+    return () => {
+      clearTimeout(timer)
+      forms.forEach((form) => {
+        form.removeEventListener('submit', handleFormSubmit)
+      })
+      globalThis.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [kcContext.url.ssoLoginInOtherTabsUrl])
 }

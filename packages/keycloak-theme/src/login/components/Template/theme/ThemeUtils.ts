@@ -1,23 +1,19 @@
+import { DEFAULT_THEME_BASE, DEFAULT_THEME_PRESET, DEFAULT_THEME_RADIUS } from '../Defaults'
+import { basePalettes, radiusPresets, themeFontFamilies, themePresets } from './Themes'
 import {
-    DEFAULT_THEME_BASE,
-    DEFAULT_THEME_PRESET,
-    DEFAULT_THEME_RADIUS
-} from "../Defaults";
-import { basePalettes, radiusPresets, themeFontFamilies, themePresets } from "./Themes";
-import {
-    type FontFamily,
-    type ModeTokens,
-    type ThemeTokens,
-    basePaletteOptions,
-    radiusPresetOptions,
-    themePresetOptions
-} from "./ThemeTypes";
+  basePaletteOptions,
+  type FontFamily,
+  type ModeTokens,
+  radiusPresetOptions,
+  type ThemeTokens,
+  themePresetOptions,
+} from './ThemeTypes'
 
 function isOption<TOption extends string>(
-    value: string | undefined,
-    options: readonly TOption[]
+  value: string | undefined,
+  options: readonly TOption[],
 ): value is TOption {
-    return value !== undefined && (options as readonly string[]).includes(value);
+  return value !== undefined && (options as readonly string[]).includes(value)
 }
 
 /**
@@ -33,26 +29,22 @@ function isOption<TOption extends string>(
  * @returns A fully resolved light/dark token map ready to be written to CSS variables.
  */
 export function resolveThemeTokens(params: {
-    preset: string;
-    base: string;
+  preset: string
+  base: string
 }): ModeTokens<ThemeTokens> {
-    const preset = isOption(params.preset, themePresetOptions)
-        ? params.preset
-        : DEFAULT_THEME_PRESET;
-    const base = isOption(params.base, basePaletteOptions)
-        ? params.base
-        : DEFAULT_THEME_BASE;
+  const preset = isOption(params.preset, themePresetOptions) ? params.preset : DEFAULT_THEME_PRESET
+  const base = isOption(params.base, basePaletteOptions) ? params.base : DEFAULT_THEME_BASE
 
-    return {
-        light: {
-            ...basePalettes[base].light,
-            ...themePresets[preset].light
-        },
-        dark: {
-            ...basePalettes[base].dark,
-            ...themePresets[preset].dark
-        }
-    };
+  return {
+    light: {
+      ...basePalettes[base].light,
+      ...themePresets[preset].light,
+    },
+    dark: {
+      ...basePalettes[base].dark,
+      ...themePresets[preset].dark,
+    },
+  }
 }
 
 /**
@@ -65,8 +57,8 @@ export function resolveThemeTokens(params: {
  * @returns The CSS variable value to apply, or `undefined` for the default case.
  */
 export function resolveRadiusPreset(value: string): string | undefined {
-    const radius = isOption(value, radiusPresetOptions) ? value : DEFAULT_THEME_RADIUS;
-    return radiusPresets[radius];
+  const radius = isOption(value, radiusPresetOptions) ? value : DEFAULT_THEME_RADIUS
+  return radiusPresets[radius]
 }
 
 /**
@@ -77,9 +69,9 @@ export function resolveRadiusPreset(value: string): string | undefined {
  * @returns
  */
 export function resolveThemeFont(value: string | undefined): string {
-    if (value && value in themeFontFamilies) {
-        return themeFontFamilies[value as FontFamily];
-    }
+  if (value && value in themeFontFamilies) {
+    return themeFontFamilies[value as FontFamily]
+  }
 
-    return themeFontFamilies.geist;
+  return themeFontFamilies.geist
 }

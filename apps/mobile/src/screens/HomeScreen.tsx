@@ -37,9 +37,7 @@ export function HomeScreen() {
           <View className="mt-4 self-start rounded-full bg-bg-muted px-4 py-2">
             <Text className="font-bold text-[#bae6fd]">API: {status}</Text>
           </View>
-          {signOutWarning && (
-            <Text className="mt-3 text-sm text-warn-fg">{signOutWarning}</Text>
-          )}
+          {signOutWarning && <Text className="mt-3 text-sm text-warn-fg">{signOutWarning}</Text>}
           <Text className="mt-2 text-ink-subtle">Runtime: {Constants.executionEnvironment}</Text>
 
           {me && (

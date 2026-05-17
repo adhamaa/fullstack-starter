@@ -1,19 +1,19 @@
-import { useInsertScriptTags } from "@keycloakify/login-ui/tools/useInsertScriptTags";
-import { waitForElementMountedOnDom } from "@keycloakify/login-ui/tools/waitForElementMountedOnDom";
-import { useEffect } from "react";
-import { useI18n } from "../../i18n";
+import { useInsertScriptTags } from '@keycloakify/login-ui/tools/useInsertScriptTags'
+import { waitForElementMountedOnDom } from '@keycloakify/login-ui/tools/waitForElementMountedOnDom'
+import { useEffect } from 'react'
+import { useI18n } from '../../i18n'
 
 export function useScript(params: { olRecoveryCodesListId: string }) {
-    const { olRecoveryCodesListId } = params;
+  const { olRecoveryCodesListId } = params
 
-    const { msgStr, isFetchingTranslations } = useI18n();
+  const { msgStr, isFetchingTranslations } = useI18n()
 
-    const { insertScriptTags } = useInsertScriptTags({
-        effectId: "LoginRecoveryAuthnCodeConfig",
-        scriptTags: [
-            {
-                type: "text/javascript",
-                textContent: () => `
+  const { insertScriptTags } = useInsertScriptTags({
+    effectId: 'LoginRecoveryAuthnCodeConfig',
+    scriptTags: [
+      {
+        type: 'text/javascript',
+        textContent: () => `
 
                     /* copy recovery codes  */
                     function copyRecoveryCodes() {
@@ -73,10 +73,10 @@ export function useScript(params: { olRecoveryCodesListId: string }) {
                         };
 
                         return fileBodyContent =
-                            ${JSON.stringify(msgStr("recovery-codes-download-file-header"))} + "\\n\\n" +
+                            ${JSON.stringify(msgStr('recovery-codes-download-file-header'))} + "\\n\\n" +
                             recoveryCodeList + "\\n" +
-                            ${JSON.stringify(msgStr("recovery-codes-download-file-description"))} + "\\n\\n" +
-                            ${JSON.stringify(msgStr("recovery-codes-download-file-date"))} + " " + formatCurrentDateTime();
+                            ${JSON.stringify(msgStr('recovery-codes-download-file-description'))} + "\\n\\n" +
+                            ${JSON.stringify(msgStr('recovery-codes-download-file-date'))} + " " + formatCurrentDateTime();
                     }
 
                     function setUpDownloadLinkAndDownload(filename, text) {
@@ -108,10 +108,10 @@ export function useScript(params: { olRecoveryCodesListId: string }) {
                         return printFileContent =
                             "<html><style>" + styles + "</style><body>" +
                             "<title>kc-download-recovery-codes</title>" +
-                            "<p>" + ${JSON.stringify(msgStr("recovery-codes-download-file-header"))} + "</p>" +
+                            "<p>" + ${JSON.stringify(msgStr('recovery-codes-download-file-header'))} + "</p>" +
                             "<div>" + recoveryCodeListHTML + "</div>" +
-                            "<p>" + ${JSON.stringify(msgStr("recovery-codes-download-file-description"))} + "</p>" +
-                            "<p>" + ${JSON.stringify(msgStr("recovery-codes-download-file-date"))} + " " + formatCurrentDateTime() + "</p>" +
+                            "<p>" + ${JSON.stringify(msgStr('recovery-codes-download-file-description'))} + "</p>" +
+                            "<p>" + ${JSON.stringify(msgStr('recovery-codes-download-file-date'))} + " " + formatCurrentDateTime() + "</p>" +
                             "</body></html>";
                     }
 
@@ -124,22 +124,22 @@ export function useScript(params: { olRecoveryCodesListId: string }) {
 
                     var printButton = document.getElementById("printRecoveryCodes");
                     printButton && printButton.addEventListener("click", printRecoveryCodes);
-                `
-            }
-        ]
-    });
+                `,
+      },
+    ],
+  })
 
-    useEffect(() => {
-        if (isFetchingTranslations) {
-            return;
-        }
+  useEffect(() => {
+    if (isFetchingTranslations) {
+      return
+    }
 
-        (async () => {
-            await waitForElementMountedOnDom({
-                elementId: olRecoveryCodesListId
-            });
+    ;(async () => {
+      await waitForElementMountedOnDom({
+        elementId: olRecoveryCodesListId,
+      })
 
-            insertScriptTags();
-        })();
-    }, [isFetchingTranslations]);
+      insertScriptTags()
+    })()
+  }, [isFetchingTranslations, olRecoveryCodesListId, insertScriptTags])
 }

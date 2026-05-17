@@ -1,1 +1,1 @@
-export * from "./UserProfileFormFields";
+export * from './UserProfileFormFields'

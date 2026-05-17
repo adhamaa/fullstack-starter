@@ -1,17 +1,17 @@
-import { createKcPageStory, type Meta, type StoryObj } from "../../mocks/KcPageStory";
+import { createKcPageStory, type Meta, type StoryObj } from '../../mocks/KcPageStory'
 
-const { KcPageStory } = createKcPageStory({ pageId: "update-email.ftl" });
+const { KcPageStory } = createKcPageStory({ pageId: 'update-email.ftl' })
 
 const meta = {
-    title: "login/update-email.ftl",
-    component: KcPageStory
-} satisfies Meta<typeof KcPageStory>;
+  title: 'login/update-email.ftl',
+  component: KcPageStory,
+} satisfies Meta<typeof KcPageStory>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
-export const Default: Story = {};
+export const Default: Story = {}
 
 /**
  * WithAppInitiatedAction:
@@ -20,15 +20,15 @@ export const Default: Story = {};
  * - Key Aspect: Ensures the "Cancel" button is visible and functional during app-initiated actions.
  */
 export const WithAppInitiatedAction: Story = {
-    args: {
-        kcContext: {
-            url: {
-                loginAction: "/mock-login-action"
-            },
-            messagesPerField: {
-                exists: () => false
-            },
-            isAppInitiatedAction: true
-        }
-    }
-};
+  args: {
+    kcContext: {
+      url: {
+        loginAction: '/mock-login-action',
+      },
+      messagesPerField: {
+        exists: () => false,
+      },
+      isAppInitiatedAction: true,
+    },
+  },
+}

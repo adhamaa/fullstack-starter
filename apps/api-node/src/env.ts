@@ -22,9 +22,7 @@ for (const candidate of [
 const envSchema = z.object({
   NODE_API_PORT: z.coerce.number().default(4000),
   FLASK_API_URL: z.string().url().default('http://localhost:5000'),
-  DATABASE_URL: z
-    .string()
-    .default('postgresql://app:app_password@localhost:5432/app_db'),
+  DATABASE_URL: z.string().default('postgresql://app:app_password@localhost:5432/app_db'),
   REDIS_URL: z.string().default('redis://localhost:6379'),
   S3_ENDPOINT: z.string().url().default('http://localhost:9000'),
   S3_REGION: z.string().default('us-east-1'),

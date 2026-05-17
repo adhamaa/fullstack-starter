@@ -1,18 +1,17 @@
-import { createKcPageStory, type Meta, type StoryObj } from "../../mocks/KcPageStory";
+import { createKcPageStory, type Meta, type StoryObj } from '../../mocks/KcPageStory'
 
-const { KcPageStory } = createKcPageStory({ pageId: "code.ftl" });
+const { KcPageStory } = createKcPageStory({ pageId: 'code.ftl' })
 
 const meta = {
-    title: "login/code.ftl",
-    component: KcPageStory
-} satisfies Meta<typeof KcPageStory>;
+  title: 'login/code.ftl',
+  component: KcPageStory,
+} satisfies Meta<typeof KcPageStory>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
-export const Default: Story = {};
-
+export const Default: Story = {}
 
 /**
  * This reflects the state when "Dark Theme" is set to "Disabled" in the realm settings
@@ -23,43 +22,43 @@ export const Default: Story = {};
  * preference is set to dark.
  */
 export const WithDarkModeForbidden: Story = {
-    args: {
-        kcContext: {
-            darkMode: false
-        }
-    }
-};
+  args: {
+    kcContext: {
+      darkMode: false,
+    },
+  },
+}
 
 export const WithErrorCode: Story = {
-    args: {
-        kcContext: {
-            code: {
-                success: false,
-                error: "Failed to generate code"
-            }
-        }
-    }
-};
+  args: {
+    kcContext: {
+      code: {
+        success: false,
+        error: 'Failed to generate code',
+      },
+    },
+  },
+}
 export const WithFrenchLanguage: Story = {
-    args: {
-        kcContext: {
-            locale: {
-                currentLanguageTag: "fr"
-            },
-            code: {
-                success: true,
-                code: "XYZ789"
-            }
-        }
-    }
-};
+  args: {
+    kcContext: {
+      locale: {
+        currentLanguageTag: 'fr',
+      },
+      code: {
+        success: true,
+        code: 'XYZ789',
+      },
+    },
+  },
+}
 export const WithHtmlErrorMessage: Story = {
-    args: {
-        kcContext: {
-            code: {
-                success: false,
-                error: "Something went wrong. <a href='https://example.com'>Try again</a>"
-            }
-        }
-    }
-};
+  args: {
+    kcContext: {
+      code: {
+        success: false,
+        error: "Something went wrong. <a href='https://example.com'>Try again</a>",
+      },
+    },
+  },
+}

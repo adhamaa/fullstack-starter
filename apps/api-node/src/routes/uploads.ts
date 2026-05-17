@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { requireAuth } from '../integrations/keycloak.js'
 import {
   completeUpload,
   getDownloadUrl,
@@ -6,7 +7,6 @@ import {
   presignRequestSchema,
   presignUpload,
 } from '../upload-intake/index.js'
-import { requireAuth } from '../integrations/keycloak.js'
 
 export const uploadsRouter: Router = Router()
 

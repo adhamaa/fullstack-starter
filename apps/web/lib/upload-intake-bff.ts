@@ -1,9 +1,9 @@
 import type { ApiClient } from '@fullstack/api-client'
 import {
+  type PresignRequest,
   parsePresignResponse,
   parseUpload,
   presignRequestSchema,
-  type PresignRequest,
 } from '@fullstack/types'
 import { NextResponse } from 'next/server'
 import { auth } from '../auth'
@@ -41,7 +41,10 @@ export async function bffPresignUpload(request: Request) {
 
   const parsed = presignRequestSchema.safeParse(body)
   if (!parsed.success) {
-    return NextResponse.json({ error: 'invalid_body', issues: parsed.error.issues }, { status: 400 })
+    return NextResponse.json(
+      { error: 'invalid_body', issues: parsed.error.issues },
+      { status: 400 },
+    )
   }
 
   return withUploadIntakeApi((api) => api.presignUpload(parsed.data))
@@ -62,10 +65,9 @@ export function createBffUploadClient(): Pick<ApiClient, 'presignUpload' | 'comp
       return parsePresignResponse(await response.json())
     },
     completeUpload: async (uploadId: string) => {
-      const response = await fetch(
-        `/dashboard/api/complete?id=${encodeURIComponent(uploadId)}`,
-        { method: 'POST' },
-      )
+      const response = await fetch(`/dashboard/api/complete?id=${encodeURIComponent(uploadId)}`, {
+        method: 'POST',
+      })
       if (!response.ok) {
         throw new Error(`complete failed: ${response.status}`)
       }

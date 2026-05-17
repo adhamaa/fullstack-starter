@@ -1,26 +1,23 @@
-import type { DeepPartial } from "@keycloakify/login-ui/tools/DeepPartial";
-import type { KcContext } from "../KcContext";
-import KcPage from "../KcPage";
-import { getKcContextMock } from "./getKcContextMock";
-export type { Meta, StoryObj } from "../../kc.gen";
+import type { DeepPartial } from '@keycloakify/login-ui/tools/DeepPartial'
+import type { KcContext } from '../KcContext'
+import KcPage from '../KcPage'
+import { getKcContextMock } from './getKcContextMock'
 
-export function createKcPageStory<PageId extends KcContext["pageId"]>(params: {
-    pageId: PageId;
-}) {
-    const { pageId } = params;
+export type { Meta, StoryObj } from '../../kc.gen'
 
-    function KcPageStory(props: {
-        kcContext?: DeepPartial<Extract<KcContext, { pageId: PageId }>>;
-    }) {
-        const { kcContext: overrides } = props;
+export function createKcPageStory<PageId extends KcContext['pageId']>(params: { pageId: PageId }) {
+  const { pageId } = params
 
-        const kcContextMock = getKcContextMock({
-            pageId,
-            overrides
-        });
+  function KcPageStory(props: { kcContext?: DeepPartial<Extract<KcContext, { pageId: PageId }>> }) {
+    const { kcContext: overrides } = props
 
-        return <KcPage kcContext={kcContextMock} />;
-    }
+    const kcContextMock = getKcContextMock({
+      pageId,
+      overrides,
+    })
 
-    return { KcPageStory };
+    return <KcPage kcContext={kcContextMock} />
+  }
+
+  return { KcPageStory }
 }

@@ -1,4 +1,11 @@
 import {
+  ApiNodeProxyTransport,
+  endIdentitySession,
+  KeycloakDirectTransport,
+  keycloakBrowserLogoutUrl,
+  needsRefresh,
+} from '@fullstack/identity-session'
+import {
   type AuthSessionResult,
   exchangeCodeAsync,
   makeRedirectUri,
@@ -7,16 +14,6 @@ import {
   useAutoDiscovery,
 } from 'expo-auth-session'
 import * as WebBrowser from 'expo-web-browser'
-import { exchangeCodeViaApi, refreshTokenViaApi } from './authProxy'
-import { loadTokens, saveTokens } from './tokenStorage'
-import {
-  clearPendingPkce,
-  clearPkceVerifier,
-  loadPkceVerifier,
-  readPendingPkce,
-  savePkceVerifier,
-  stashPendingPkce,
-} from './pkceStorage'
 import {
   createContext,
   type ReactNode,
@@ -27,15 +24,18 @@ import {
   useRef,
   useState,
 } from 'react'
-import {
-  ApiNodeProxyTransport,
-  endIdentitySession,
-  KeycloakDirectTransport,
-  keycloakBrowserLogoutUrl,
-  needsRefresh,
-} from '@fullstack/identity-session'
 import { Platform } from 'react-native'
 import { apiBaseUrl } from '../lib/api'
+import { exchangeCodeViaApi, refreshTokenViaApi } from './authProxy'
+import {
+  clearPendingPkce,
+  clearPkceVerifier,
+  loadPkceVerifier,
+  readPendingPkce,
+  savePkceVerifier,
+  stashPendingPkce,
+} from './pkceStorage'
+import { loadTokens, saveTokens } from './tokenStorage'
 
 // Popup callback page: allow trailing-slash mismatch between redirect_uri and return URL.
 WebBrowser.maybeCompleteAuthSession({ skipRedirectCheck: true })
@@ -82,9 +82,7 @@ async function load(): Promise<StoredTokens | null> {
   }
 }
 
-function authParamsFromResult(
-  result: AuthSessionResult,
-): { code: string; state?: string } | null {
+function authParamsFromResult(result: AuthSessionResult): { code: string; state?: string } | null {
   if (!('params' in result)) return null
   const code = result.params?.code
   if (!code) return null
@@ -183,14 +181,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     window.history.replaceState({}, '', url.pathname + url.search + url.hash)
   }, [])
 
-  const resolveCodeVerifier = useCallback(
-    (state: string | undefined, fallback?: string) => {
-      if (fallback) return fallback
-      if (!state) return undefined
-      return loadPkceVerifier(state) ?? undefined
-    },
-    [],
-  )
+  const resolveCodeVerifier = useCallback((state: string | undefined, fallback?: string) => {
+    if (fallback) return fallback
+    if (!state) return undefined
+    return loadPkceVerifier(state) ?? undefined
+  }, [])
 
   const exchangeAuthCode = useCallback(
     async (code: string, codeVerifier: string, oauthState?: string) => {
@@ -271,8 +266,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const callback = oauthParamsFromLocation()
     if (!callback) return
 
-    const verifier =
-      loadPkceVerifier(callback.state) ?? readPendingPkce()?.codeVerifier ?? null
+    const verifier = loadPkceVerifier(callback.state) ?? readPendingPkce()?.codeVerifier ?? null
     if (!verifier) {
       console.warn('[auth] OAuth callback missing PKCE verifier for state', callback.state)
       return
@@ -314,10 +308,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const result = await promptAsync()
       const params = authParamsFromResult(result)
-      await completeAuthResult(
-        result,
-        resolveCodeVerifier(params?.state, request.codeVerifier),
-      )
+      await completeAuthResult(result, resolveCodeVerifier(params?.state, request.codeVerifier))
     } catch (error) {
       console.warn('[auth] signIn failed:', (error as Error).message, { redirectUri })
     } finally {
@@ -327,8 +318,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = useCallback(async () => {
     const refreshToken = tokens?.refreshToken
-    const transport =
-      Platform.OS === 'web' ? webSessionEndTransport : nativeSessionEndTransport
+    const transport = Platform.OS === 'web' ? webSessionEndTransport : nativeSessionEndTransport
 
     const result = await endIdentitySession(transport, {
       clientId: CLIENT_ID,

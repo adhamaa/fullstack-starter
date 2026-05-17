@@ -1,14 +1,14 @@
 import {
-  parseDownloadResponse,
-  parseMeResponse,
-  parsePresignResponse,
-  parseUpload,
-  parseUploadsListResponse,
   type CurrentUser,
   type DownloadResponse,
   type HealthStatus,
   type PresignRequest,
   type PresignResponse,
+  parseDownloadResponse,
+  parseMeResponse,
+  parsePresignResponse,
+  parseUpload,
+  parseUploadsListResponse,
   type Upload,
 } from '@fullstack/types'
 
@@ -83,9 +83,7 @@ export function createApiClient({ baseUrl, accessToken, getToken }: ApiClientOpt
         }),
       ),
     completeUpload: async (uploadId: string) =>
-      parseUpload(
-        await request(`/uploads/${uploadId}/complete`, { method: 'POST', json: {} }),
-      ),
+      parseUpload(await request(`/uploads/${uploadId}/complete`, { method: 'POST', json: {} })),
     getDownloadUrl: async (uploadId: string) =>
       parseDownloadResponse(await request(`/uploads/${uploadId}/download`)),
   }
@@ -93,5 +91,5 @@ export function createApiClient({ baseUrl, accessToken, getToken }: ApiClientOpt
 
 export type ApiClient = ReturnType<typeof createApiClient>
 
-export { uploadFile } from './upload-intake'
 export type { UploadFileInput, UploadFileOptions, UploadPutFn } from './upload-intake'
+export { uploadFile } from './upload-intake'

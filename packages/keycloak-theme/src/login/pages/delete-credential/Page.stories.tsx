@@ -1,24 +1,23 @@
-import { createKcPageStory, type Meta, type StoryObj } from "../../mocks/KcPageStory";
+import { createKcPageStory, type Meta, type StoryObj } from '../../mocks/KcPageStory'
 
-const { KcPageStory } = createKcPageStory({ pageId: "delete-credential.ftl" });
+const { KcPageStory } = createKcPageStory({ pageId: 'delete-credential.ftl' })
 
 const meta = {
-    title: "login/delete-credential.ftl",
-    component: KcPageStory
-} satisfies Meta<typeof KcPageStory>;
+  title: 'login/delete-credential.ftl',
+  component: KcPageStory,
+} satisfies Meta<typeof KcPageStory>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
-export const Default: Story = {};
-
+export const Default: Story = {}
 
 export const WithCustomCredentialLabel: Story = {
-    args: {
-        kcContext: {
-            credentialLabel: "Test Credential",
-            url: { loginAction: "/login-action" }
-        }
-    }
-};
+  args: {
+    kcContext: {
+      credentialLabel: 'Test Credential',
+      url: { loginAction: '/login-action' },
+    },
+  },
+}
