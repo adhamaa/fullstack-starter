@@ -1,5 +1,5 @@
 import type { Upload } from '@fullstack/types'
-import type { ApiClient } from './index.js'
+import type { ApiClient } from './index'
 
 export type UploadFileInput = {
   file: Blob

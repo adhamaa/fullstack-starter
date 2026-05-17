@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { createApiClient } from './index.js'
+import { createApiClient } from './index'
 
 describe('createApiClient', () => {
   it('sends bearer token from getToken on each request', async () => {

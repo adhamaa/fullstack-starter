@@ -93,5 +93,5 @@ export function createApiClient({ baseUrl, accessToken, getToken }: ApiClientOpt
 
 export type ApiClient = ReturnType<typeof createApiClient>
 
-export { uploadFile } from './upload-intake.js'
-export type { UploadFileInput, UploadFileOptions, UploadPutFn } from './upload-intake.js'
+export { uploadFile } from './upload-intake'
+export type { UploadFileInput, UploadFileOptions, UploadPutFn } from './upload-intake'

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
-import { createApiClient } from './index.js'
-import { uploadFile } from './upload-intake.js'
+import { createApiClient } from './index'
+import { uploadFile } from './upload-intake'
 
 describe('uploadFile', () => {
   it('presigns, PUTs via injected put, then completes', async () => {

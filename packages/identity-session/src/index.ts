@@ -2,15 +2,15 @@ import type {
   ExchangeAuthorizationCodeParams,
   RefreshAccessTokenParams,
   TokenEndpointTransport,
-} from './transport.js'
-import { tokenSetFromOAuthResponse, type TokenSet } from './tokens.js'
+} from './transport'
+import { tokenSetFromOAuthResponse, type TokenSet } from './tokens'
 
 export {
   REFRESH_LEEWAY_MS,
   needsRefresh,
   tokenSetFromOAuthResponse,
   type TokenSet,
-} from './tokens.js'
+} from './tokens'
 
 export {
   endIdentitySession,
@@ -18,7 +18,7 @@ export {
   keycloakBrowserLogoutUrl,
   type EndIdentitySessionParams,
   type EndIdentitySessionResult,
-} from './session-end.js'
+} from './session-end'
 
 export {
   ApiNodeProxyTransport,
@@ -31,7 +31,7 @@ export {
   type SessionEndParams,
   type SessionEndTransport,
   type TokenEndpointTransport,
-} from './transport.js'
+} from './transport'
 
 export async function exchangeAuthorizationCode(
   transport: TokenEndpointTransport,

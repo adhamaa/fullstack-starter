@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { needsRefresh, REFRESH_LEEWAY_MS, tokenSetFromOAuthResponse } from './tokens.js'
+import { needsRefresh, REFRESH_LEEWAY_MS, tokenSetFromOAuthResponse } from './tokens'
 
 describe('needsRefresh', () => {
   it('is false when expiry is beyond leeway', () => {
