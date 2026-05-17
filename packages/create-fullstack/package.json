@@ -4,6 +4,10 @@
   "description": "Scaffold a new project from the fullstack-starter template",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adhamaa/fullstack-starter.git"
+  },
   "bin": {
     "create-fullstack": "./dist/index.js"
   },
