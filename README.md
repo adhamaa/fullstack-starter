@@ -208,5 +208,12 @@ Canonical versions are **Git tags** `v*` (semver). The npm package `@adhamaa/cre
 **Maintainer setup (one-time):**
 
 - GitHub **Settings → General → Template repository** — enable so users can use **Use this template**.
-- GitHub repo secret **`NPM_TOKEN`** — npm access token with publish rights for `@adhamaa` (Automation or Granular Access Token). Required for the publish job.
+- npm **Trusted Publisher** for `@adhamaa/create-fullstack` (replaces a long-lived `NPM_TOKEN` secret):
+  1. [npm](https://www.npmjs.com) → **Packages** → `@adhamaa/create-fullstack` → **Settings** → **Trusted Publisher** → **Add trusted publisher**
+  2. **Provider:** GitHub Actions
+  3. **Repository:** `adhamaa/fullstack-starter`
+  4. **Workflow filename:** `release.yml` (exact name, including `.yml`)
+  5. **Environment:** leave blank (unless you add a GitHub Environment to the publish job)
 - npm: ensure you own the `@adhamaa` scope and the package name `@adhamaa/create-fullstack` is available (or adjust `packages/create-fullstack/package.json` before the first publish).
+
+After a successful publish via Trusted Publishing, you can delete the repo secret **`NPM_TOKEN`** if it still exists.

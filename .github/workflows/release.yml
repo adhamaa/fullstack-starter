@@ -75,6 +75,9 @@ jobs:
   publish-npm:
     needs: verify
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
@@ -103,6 +106,4 @@ jobs:
           "
           pnpm --filter @adhamaa/create-fullstack build
           cd packages/create-fullstack
-          npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npm publish --provenance --access public
