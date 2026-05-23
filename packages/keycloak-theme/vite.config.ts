@@ -79,7 +79,6 @@ export default defineConfig({
     keycloakify({
       accountThemeImplementation: 'Multi-Page',
       themeName: [...themeNames],
-      doCreateJar: false,
       environmentVariables: [...shadcnEnvironmentVariables],
       postBuild: async (buildContext) => {
         await buildEmailTheme({

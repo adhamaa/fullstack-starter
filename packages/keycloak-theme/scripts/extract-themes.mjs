@@ -4,7 +4,10 @@ import AdmZip from 'adm-zip'
 
 const projectDir = path.resolve(import.meta.dirname, '..')
 const distDir = path.join(projectDir, 'dist_keycloak')
-const outThemesDir = path.resolve(projectDir, '..', '..', 'infra', 'keycloak', 'themes')
+const defaultOutThemesDir = path.resolve(projectDir, '..', '..', 'infra', 'keycloak', 'themes')
+const outThemesDir = process.env.KEYCLOAK_THEME_OUTPUT_DIR?.trim()
+  ? path.resolve(process.env.KEYCLOAK_THEME_OUTPUT_DIR.trim())
+  : defaultOutThemesDir
 
 function ensureEmptyDir(dirPath) {
   fs.mkdirSync(dirPath, { recursive: true })

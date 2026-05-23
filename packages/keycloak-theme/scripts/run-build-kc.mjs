@@ -4,9 +4,12 @@
  * (tools/jdk21, tools/apache-maven-3.9.6) when present.
  */
 import { spawnSync } from 'node:child_process'
-import { existsSync } from 'node:fs'
+import { createRequire } from 'node:module'
+import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+
+const require = createRequire(import.meta.url)
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const pkgDir = path.join(__dirname, '..')
@@ -55,7 +58,31 @@ function run(cmd, args) {
   return r.status ?? 1
 }
 
+const skipJar =
+  process.env.KEYCLOAK_THEME_SKIP_JAR === '1' || process.argv.includes('--skip-jar')
+
+function keycloakifySupportsSkipJar() {
+  try {
+    const keycloakifyPkgJson = require.resolve('keycloakify/package.json')
+    const mainJs = path.join(path.dirname(keycloakifyPkgJson), 'bin', 'main.js')
+    return readFileSync(mainJs, 'utf8').includes('skip-jar')
+  } catch {
+    return false
+  }
+}
+
+if (skipJar && !keycloakifySupportsSkipJar()) {
+  console.error(
+    '[keycloakify] --skip-jar is not supported by this keycloakify version. Re-run without skip-jar or upgrade keycloakify.',
+  )
+  process.exit(1)
+}
+
 let code = run('pnpm', ['run', 'build:app'])
 if (code !== 0) process.exit(code)
-code = run('pnpm', ['exec', 'keycloakify', 'build'])
+
+const keycloakifyArgs = ['exec', 'keycloakify', 'build']
+if (skipJar) keycloakifyArgs.push('--skip-jar')
+
+code = run('pnpm', keycloakifyArgs)
 process.exit(code ?? 0)
