@@ -36,7 +36,6 @@ export function parseArgv(argv) {
       const value = argv[++i]
       if (!value) throw new Error(`Missing value for ${arg}`)
       result.outputDir = value
-      continue
     }
   }
 

@@ -4,8 +4,8 @@
  * (tools/jdk21, tools/apache-maven-3.9.6) when present.
  */
 import { spawnSync } from 'node:child_process'
-import { createRequire } from 'node:module'
 import { existsSync, readFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -58,8 +58,7 @@ function run(cmd, args) {
   return r.status ?? 1
 }
 
-const skipJar =
-  process.env.KEYCLOAK_THEME_SKIP_JAR === '1' || process.argv.includes('--skip-jar')
+const skipJar = process.env.KEYCLOAK_THEME_SKIP_JAR === '1' || process.argv.includes('--skip-jar')
 
 function keycloakifySupportsSkipJar() {
   try {
