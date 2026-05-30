@@ -2,7 +2,7 @@ import {
   ApiNodeProxyTransport,
   exchangeAuthorizationCode,
   refreshAccessToken,
-} from '@fullstack/identity-session'
+} from '@radionic-homeopathy/identity-session'
 import { apiBaseUrl } from '../lib/api'
 
 const transport = new ApiNodeProxyTransport({ apiBaseUrl })

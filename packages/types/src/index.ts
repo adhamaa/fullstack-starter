@@ -1,4 +1,13 @@
 import type { z } from 'zod'
+import type {
+  ClinicalCondition,
+  Formula,
+  Potency,
+  RadionicRate,
+  RateBank,
+  Remedy,
+  Symptom,
+} from './domain.js'
 import {
   currentUserSchema,
   downloadResponseSchema,
@@ -13,6 +22,7 @@ import {
 } from './schemas.js'
 
 export type CurrentUser = z.infer<typeof currentUserSchema>
+export type { ClinicalCondition, Formula, Potency, RadionicRate, RateBank, Remedy, Symptom }
 export type Upload = z.infer<typeof uploadSchema>
 export type UploadStatus = z.infer<typeof uploadSchema>['status']
 export type PresignRequest = z.infer<typeof presignRequestSchema>

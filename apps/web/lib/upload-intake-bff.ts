@@ -1,10 +1,10 @@
-import type { ApiClient } from '@fullstack/api-client'
+import type { ApiClient } from '@radionic-homeopathy/api-client'
 import {
   type PresignRequest,
   parsePresignResponse,
   parseUpload,
   presignRequestSchema,
-} from '@fullstack/types'
+} from '@radionic-homeopathy/types'
 import { NextResponse } from 'next/server'
 import { auth } from '../auth'
 import { apiClient } from './api'

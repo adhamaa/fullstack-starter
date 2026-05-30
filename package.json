@@ -1,5 +1,5 @@
 {
-  "name": "fullstack-starter",
+  "name": "radionic-homeopathy",
   "private": true,
   "packageManager": "pnpm@10.33.4",
   "scripts": {
@@ -10,17 +10,20 @@
     "dev:api-node": "pnpm --filter api-node dev",
     "dev:api-python": "pnpm --filter api-python dev",
     "dev:backend": "turbo dev --parallel --filter=api-node --filter=api-python",
-    "dev:keycloak-theme": "pnpm --filter @fullstack/keycloak-theme dev",
-    "storybook:keycloak-theme": "pnpm --filter @fullstack/keycloak-theme storybook",
+    "dev:keycloak-theme": "pnpm --filter @radionic-homeopathy/keycloak-theme dev",
+    "storybook:keycloak-theme": "pnpm --filter @radionic-homeopathy/keycloak-theme storybook",
     "build": "turbo build",
-    "build:keycloak-theme": "pnpm --filter @fullstack/keycloak-theme build",
+    "build:keycloak-theme": "pnpm --filter @radionic-homeopathy/keycloak-theme build",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
     "format": "biome format --write .",
     "check": "biome check .",
     "infra:up": "docker compose -f infra/docker-compose.yml up -d",
-    "infra:down": "docker compose -f infra/docker-compose.yml down"
+    "infra:down": "docker compose -f infra/docker-compose.yml down",
+    "db:generate": "pnpm --filter api-node db:generate",
+    "db:migrate": "pnpm --filter api-node db:migrate",
+    "db:seed": "pnpm --filter api-node db:seed"
   },
   "devDependencies": {
     "@biomejs/biome": "latest",

@@ -10,7 +10,7 @@ import {
   parseUpload,
   parseUploadsListResponse,
   type Upload,
-} from '@fullstack/types'
+} from '@radionic-homeopathy/types'
 
 export type TokenProvider = () => string | null | undefined | Promise<string | null | undefined>
 

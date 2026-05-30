@@ -1,4 +1,4 @@
-import type { Upload } from '@fullstack/types'
+import type { Upload } from '@radionic-homeopathy/types'
 import type { ApiClient } from './index'
 
 export type UploadFileInput = {

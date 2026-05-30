@@ -5,9 +5,9 @@
     "jsxImportSource": "nativewind",
     "baseUrl": ".",
     "paths": {
-      "@fullstack/api-client": ["../../packages/api-client/src/index.ts"],
-      "@fullstack/identity-session": ["../../packages/identity-session/src/index.ts"],
-      "@fullstack/types": ["../../packages/types/src/index.ts"]
+      "@radionic-homeopathy/api-client": ["../../packages/api-client/src/index.ts"],
+      "@radionic-homeopathy/identity-session": ["../../packages/identity-session/src/index.ts"],
+      "@radionic-homeopathy/types": ["../../packages/types/src/index.ts"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "nativewind-env.d.ts"]

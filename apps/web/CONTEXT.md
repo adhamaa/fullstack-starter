@@ -20,7 +20,7 @@ _Avoid:_ middleware (legacy name), auth proxy.
 
 - **Session gate** runs before **Dashboard** renders.
 - **Upload intake BFF** is the web adapter for **Upload intake**; the browser still PUTs files directly to object storage.
-- **Identity session end** on web uses `@fullstack/identity-session` with **IdP session end** enabled.
+- **Identity session end** on web uses `@radionic-homeopathy/identity-session` with **IdP session end** enabled.
 
 ## Example dialogue
 

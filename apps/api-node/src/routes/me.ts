@@ -1,4 +1,4 @@
-import { currentUserFromKeycloakClaims, parseKeycloakAccessClaims } from '@fullstack/types'
+import { currentUserFromKeycloakClaims, parseKeycloakAccessClaims } from '@radionic-homeopathy/types'
 import { Router } from 'express'
 import { requireAuth } from '../integrations/keycloak.js'
 

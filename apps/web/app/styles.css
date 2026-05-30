@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "@fullstack/config/tailwind-theme.css";
+@import "@radionic-homeopathy/config/tailwind-theme.css";
 
 @layer base {
   :root {

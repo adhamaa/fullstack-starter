@@ -1,13 +1,17 @@
 import cors from 'cors'
 import express from 'express'
+import { ZodError } from 'zod'
 import { env } from './env.js'
 import { getNovuStatus } from './integrations/novu.js'
 import { checkDatabase } from './integrations/postgres.js'
 import { checkRedis } from './integrations/redis.js'
 import { checkS3 } from './integrations/s3.js'
-import { authRouter } from './routes/auth.js'
-import { meRouter } from './routes/me.js'
-import { uploadsRouter } from './routes/uploads.js'
+import { conditionsRouter } from './routes/conditions.js'
+import { formulasRouter } from './routes/formulas.js'
+import { potenciesRouter } from './routes/potencies.js'
+import { ratesRouter } from './routes/rates.js'
+import { remediesRouter } from './routes/remedies.js'
+import { symptomsRouter } from './routes/symptoms.js'
 
 const app = express()
 
@@ -45,14 +49,12 @@ app.get('/health', async (_request, response) => {
   })
 })
 
-app.get('/health/flask', async (_request, response) => {
-  const flaskResponse = await fetch(`${env.FLASK_API_URL}/health`)
-  response.status(flaskResponse.status).json(await flaskResponse.json())
-})
-
-app.use(authRouter)
-app.use(meRouter)
-app.use(uploadsRouter)
+app.use('/remedies', remediesRouter)
+app.use('/symptoms', symptomsRouter)
+app.use('/conditions', conditionsRouter)
+app.use('/potencies', potenciesRouter)
+app.use('/formulas', formulasRouter)
+app.use('/rates', ratesRouter)
 
 app.use(
   (
@@ -61,6 +63,11 @@ app.use(
     response: express.Response,
     _next: express.NextFunction,
   ) => {
+    if (error instanceof ZodError) {
+      response.status(400).json({ error: 'validation_error', details: error.flatten() })
+      return
+    }
+
     console.error('[api-node] unhandled error:', error)
     response.status(500).json({ error: 'internal_server_error' })
   },

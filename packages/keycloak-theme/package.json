@@ -1,5 +1,5 @@
 {
-  "name": "@fullstack/keycloak-theme",
+  "name": "@radionic-homeopathy/keycloak-theme",
   "private": true,
   "version": "0.0.0",
   "description": "Keycloak 26 theme(s) built with Keycloakify + shadcn/ui",
@@ -28,7 +28,7 @@
     "@fontsource-variable/manrope": "^5.2.8",
     "@fontsource-variable/playfair-display": "^5.2.8",
     "@fontsource-variable/source-sans-3": "^5.2.9",
-    "@fullstack/config": "workspace:*",
+    "@radionic-homeopathy/config": "workspace:*",
     "@keycloakify/login-ui": "~250004.7.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

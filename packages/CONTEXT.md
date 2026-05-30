@@ -5,15 +5,15 @@ Shared libraries consumed by web, mobile, and api-node. Platform vocabulary live
 ## Language
 
 **API contract package**  
-`@fullstack/types` — Zod schemas, parsers, and claim/upload mappers.  
+`@radionic-homeopathy/types` — Zod schemas, parsers, and claim/upload mappers.  
 _Avoid:_ types folder, DTO package.
 
 **API client**  
-`@fullstack/api-client` — authenticated HTTP client and **Upload intake** `uploadFile` workflow.  
+`@radionic-homeopathy/api-client` — authenticated HTTP client and **Upload intake** `uploadFile` workflow.  
 _Avoid:_ SDK, fetch wrapper.
 
 **Identity session package**  
-`@fullstack/identity-session` — token exchange, refresh, leeway, transport seam, and **Identity session end**.  
+`@radionic-homeopathy/identity-session` — token exchange, refresh, leeway, transport seam, and **Identity session end**.  
 _Avoid:_ auth-utils, keycloak-client.
 
 ## Relationships

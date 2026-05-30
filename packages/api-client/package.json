@@ -1,5 +1,5 @@
 {
-  "name": "@fullstack/api-client",
+  "name": "@radionic-homeopathy/api-client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,7 +12,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@fullstack/types": "workspace:*"
+    "@radionic-homeopathy/types": "workspace:*"
   },
   "devDependencies": {
     "typescript": "latest",

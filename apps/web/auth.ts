@@ -3,7 +3,7 @@ import {
   KeycloakDirectTransport,
   needsRefresh,
   refreshAccessToken,
-} from '@fullstack/identity-session'
+} from '@radionic-homeopathy/identity-session'
 import NextAuth, { type DefaultSession } from 'next-auth'
 import Keycloak from 'next-auth/providers/keycloak'
 

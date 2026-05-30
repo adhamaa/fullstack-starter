@@ -1,4 +1,4 @@
-# `@fullstack/keycloak-theme`
+# `@radionic-homeopathy/keycloak-theme`
 
 Keycloakify login theme based on [keycloakify-shadcn-starter](https://github.com/Oussemasahbeni/keycloakify-shadcn-starter) (shadcn/ui + Tailwind v4). See the [Keycloakify shadcn docs](https://docs.keycloakify.dev/starter-themes/shadcn-ui-tailwind).
 
@@ -25,7 +25,7 @@ pnpm storybook:keycloak-theme
 # → http://localhost:6006
 
 # Preview email templates
-pnpm --filter @fullstack/keycloak-theme emails:preview
+pnpm --filter @radionic-homeopathy/keycloak-theme emails:preview
 ```
 
 Customize branding via `SHADCN_THEME_*` env vars in `vite.config.ts` (see starter README for presets, layouts, fonts).

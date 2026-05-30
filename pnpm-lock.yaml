@@ -29,10 +29,10 @@ importers:
       '@aws-sdk/s3-request-presigner':
         specifier: latest
         version: 3.1045.0
-      '@fullstack/identity-session':
+      '@radionic-homeopathy/identity-session':
         specifier: workspace:*
         version: link:../../packages/identity-session
-      '@fullstack/types':
+      '@radionic-homeopathy/types':
         specifier: workspace:*
         version: link:../../packages/types
       '@novu/node':
@@ -101,16 +101,16 @@ importers:
       '@expo/metro-runtime':
         specifier: ~6.1.2
         version: 6.1.2(expo@54.0.34)(react-dom@19.1.0(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.85.3(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
-      '@fullstack/api-client':
+      '@radionic-homeopathy/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
-      '@fullstack/config':
+      '@radionic-homeopathy/config':
         specifier: workspace:*
         version: link:../../packages/config
-      '@fullstack/identity-session':
+      '@radionic-homeopathy/identity-session':
         specifier: workspace:*
         version: link:../../packages/identity-session
-      '@fullstack/types':
+      '@radionic-homeopathy/types':
         specifier: workspace:*
         version: link:../../packages/types
       expo:
@@ -183,16 +183,16 @@ importers:
 
   apps/web:
     dependencies:
-      '@fullstack/api-client':
+      '@radionic-homeopathy/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
-      '@fullstack/config':
+      '@radionic-homeopathy/config':
         specifier: workspace:*
         version: link:../../packages/config
-      '@fullstack/identity-session':
+      '@radionic-homeopathy/identity-session':
         specifier: workspace:*
         version: link:../../packages/identity-session
-      '@fullstack/types':
+      '@radionic-homeopathy/types':
         specifier: workspace:*
         version: link:../../packages/types
       next:
@@ -235,7 +235,7 @@ importers:
 
   packages/api-client:
     dependencies:
-      '@fullstack/types':
+      '@radionic-homeopathy/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
@@ -308,7 +308,7 @@ importers:
       '@fontsource-variable/source-sans-3':
         specifier: ^5.2.9
         version: 5.2.9
-      '@fullstack/config':
+      '@radionic-homeopathy/config':
         specifier: workspace:*
         version: link:../config
       '@keycloakify/login-ui':

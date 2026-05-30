@@ -13,7 +13,7 @@ Accepted
 - **`GET /me`** returns **CurrentUser** from JWT claims only. No Postgres writes and no notification identify on this route.
 - **Profile sync** (upsert `users` from token claims) runs at **Upload intake** presign, before inserting an upload row, so `uploads.user_id` FK is satisfied even when `/me` was never called.
 - **Subscriber sync** (Novu identify) runs at presign as well, idempotent per subject — not on every `/me` poll.
-- Claim mapping stays in `@fullstack/types` (`currentUserFromKeycloakClaims`, `parseKeycloakAccessClaims`).
+- Claim mapping stays in `@radionic-homeopathy/types` (`currentUserFromKeycloakClaims`, `parseKeycloakAccessClaims`).
 
 ## Considered options
 

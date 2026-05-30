@@ -1,4 +1,4 @@
-import type { CurrentUser, Upload } from '@fullstack/types'
+import type { CurrentUser, Upload } from '@radionic-homeopathy/types'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { auth, signOut } from '../../auth'

@@ -1,4 +1,4 @@
-import { KeycloakDirectTransport } from '@fullstack/identity-session'
+import { KeycloakDirectTransport } from '@radionic-homeopathy/identity-session'
 import { Router } from 'express'
 import { z } from 'zod'
 import { env } from '../env.js'

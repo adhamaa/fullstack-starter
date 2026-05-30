@@ -7,7 +7,7 @@ import {
   parseKeycloakAccessClaims,
   presignRequestSchema,
   uploadFromDb,
-} from '@fullstack/types'
+} from '@radionic-homeopathy/types'
 import { and, desc, eq, sql } from 'drizzle-orm'
 import type { JWTPayload } from 'jose'
 import { v4 as uuid } from 'uuid'

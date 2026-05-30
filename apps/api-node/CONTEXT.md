@@ -20,7 +20,7 @@ _Avoid:_ azp hack, JWT middleware.
 
 - **Upload intake module** performs **Profile sync** and **Subscriber sync** at presign.
 - **Complete** in the module requires the object to exist in storage before `ready`.
-- **Token proxy** delegates token and session-end calls to Keycloak via `@fullstack/identity-session` transports.
+- **Token proxy** delegates token and session-end calls to Keycloak via `@radionic-homeopathy/identity-session` transports.
 
 ## Example dialogue
 

@@ -1,5 +1,5 @@
 const nativewind = require('nativewind/preset')
-const fullstack = require('@fullstack/config/tailwind-preset')
+const fullstack = require('@radionic-homeopathy/config/tailwind-preset')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {

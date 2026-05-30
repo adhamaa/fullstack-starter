@@ -4,7 +4,7 @@ import {
   KeycloakDirectTransport,
   keycloakBrowserLogoutUrl,
   needsRefresh,
-} from '@fullstack/identity-session'
+} from '@radionic-homeopathy/identity-session'
 import {
   type AuthSessionResult,
   exchangeCodeAsync,

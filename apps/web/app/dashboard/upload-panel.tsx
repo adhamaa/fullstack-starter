@@ -1,7 +1,7 @@
 'use client'
 
-import { uploadFile } from '@fullstack/api-client'
-import type { Upload } from '@fullstack/types'
+import { uploadFile } from '@radionic-homeopathy/api-client'
+import type { Upload } from '@radionic-homeopathy/types'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { createBffUploadClient } from '../../lib/upload-intake-bff'

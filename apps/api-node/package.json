@@ -11,13 +11,14 @@
     "test": "vitest run",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx src/db/migrate.ts",
+    "db:seed": "tsx src/db/seed.ts",
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "latest",
     "@aws-sdk/s3-request-presigner": "latest",
-    "@fullstack/identity-session": "workspace:*",
-    "@fullstack/types": "workspace:*",
+    "@radionic-homeopathy/identity-session": "workspace:*",
+    "@radionic-homeopathy/types": "workspace:*",
     "@novu/node": "latest",
     "cors": "latest",
     "dotenv": "latest",
