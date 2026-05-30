@@ -9,7 +9,8 @@ import {
   rateBanks,
   remedies,
 } from '../db/schema/index.js'
-import { paginationSchema, uuidParamSchema } from '../validation/domain.js'
+import { requireAuth } from '../middleware/require-auth.js'
+import { createFormulaSchema, paginationSchema, uuidParamSchema } from '../validation/domain.js'
 
 export const formulasRouter = Router()
 
@@ -42,6 +43,24 @@ formulasRouter.get('/', async (request, response) => {
     limit,
     offset,
   })
+})
+
+/** Create a formula. Guarded: requires a valid Keycloak practitioner bearer token. */
+formulasRouter.post('/', requireAuth, async (request, response) => {
+  const body = createFormulaSchema.parse(request.body)
+
+  const [created] = await db
+    .insert(formulas)
+    .values({
+      name: body.name,
+      indication: body.indication,
+      description: body.description,
+      bodySystem: body.body_system,
+      category: body.category,
+    })
+    .returning()
+
+  response.status(201).json(toFormulaDto(created))
 })
 
 formulasRouter.get('/:id/rates', async (request, response) => {

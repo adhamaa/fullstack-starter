@@ -38,6 +38,14 @@ export const createConditionSchema = z.object({
   category: z.string().max(100).optional(),
 })
 
+export const createFormulaSchema = z.object({
+  name: z.string().min(1).max(255),
+  indication: z.string().optional(),
+  description: z.string().optional(),
+  body_system: z.string().max(100).optional(),
+  category: z.string().max(100).optional(),
+})
+
 export const rateSearchSchema = z.object({
   bank: z.string().optional(),
   value: z.string().optional(),
