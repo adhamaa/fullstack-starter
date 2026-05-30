@@ -1,15 +1,11 @@
 import {
-  type CurrentUser,
-  type DownloadResponse,
   type HealthStatus,
   type PresignRequest,
-  type PresignResponse,
   parseDownloadResponse,
   parseMeResponse,
   parsePresignResponse,
   parseUpload,
   parseUploadsListResponse,
-  type Upload,
 } from '@radionic-homeopathy/types'
 
 export type TokenProvider = () => string | null | undefined | Promise<string | null | undefined>

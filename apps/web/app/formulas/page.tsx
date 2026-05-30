@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { PageShell } from '../../components/site-nav'
-import { formulasApi, type Formula } from '../../lib/services'
+import { type Formula, formulasApi } from '../../lib/services'
 
 export default function FormulasPage() {
   const [formulas, setFormulas] = useState<Formula[]>([])
@@ -27,7 +27,9 @@ export default function FormulasPage() {
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold">Radionic Formulas</h1>
-          <p className="text-ink-muted">Copen-style composite remedies with linked radionic rates</p>
+          <p className="text-ink-muted">
+            Copen-style composite remedies with linked radionic rates
+          </p>
         </div>
 
         {loading && <p className="text-ink-muted">Loading formulas...</p>}
@@ -35,7 +37,9 @@ export default function FormulasPage() {
 
         {!loading && !error && (
           <>
-            <p className="text-sm text-ink-muted">Showing {formulas.length} of {total} formulas</p>
+            <p className="text-sm text-ink-muted">
+              Showing {formulas.length} of {total} formulas
+            </p>
             <div className="grid gap-4 md:grid-cols-2">
               {formulas.map((formula) => (
                 <Link
@@ -44,7 +48,9 @@ export default function FormulasPage() {
                   className="rounded-2xl border border-slate-700 bg-bg-elevated p-5 no-underline hover:border-accent"
                 >
                   <h2 className="text-xl font-bold text-ink">{formula.name}</h2>
-                  {formula.indication && <p className="mt-2 text-ink-muted">{formula.indication}</p>}
+                  {formula.indication && (
+                    <p className="mt-2 text-ink-muted">{formula.indication}</p>
+                  )}
                   {formula.body_system && (
                     <p className="mt-2 text-sm text-accent">{formula.body_system}</p>
                   )}

@@ -1,7 +1,7 @@
 import { and, count, eq, ilike, or, sql } from 'drizzle-orm'
 import { Router } from 'express'
 import { db } from '../db/index.js'
-import { formulas, radionicRates, rateBanks, remedies } from '../db/schema/index.js'
+import { radionicRates, rateBanks } from '../db/schema/index.js'
 import { paginationSchema, rateSearchSchema } from '../validation/domain.js'
 
 export const ratesRouter = Router()

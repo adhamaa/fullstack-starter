@@ -5,16 +5,16 @@ import { db } from '../db/index.js'
 import {
   bodySystems,
   clinicalConditions,
-  modalities,
   mentalSymptoms,
+  modalities,
   potencies,
   radionicRates,
   rateBanks,
+  remedies,
   remedyConditions,
   remedyPotencies,
   remedyRelationships,
   remedySymptoms,
-  remedies,
   symptoms,
 } from '../db/schema/index.js'
 import {
@@ -121,10 +121,7 @@ remediesRouter.get('/:id/details', async (request, response) => {
     .where(eq(modalities.remedyId, id))
     .orderBy(modalities.type, modalities.category)
 
-  const mentalRows = await db
-    .select()
-    .from(mentalSymptoms)
-    .where(eq(mentalSymptoms.remedyId, id))
+  const mentalRows = await db.select().from(mentalSymptoms).where(eq(mentalSymptoms.remedyId, id))
 
   const potencyRows = await db
     .select({

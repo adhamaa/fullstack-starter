@@ -46,7 +46,9 @@
       "!**/.venv",
       "!**/android",
       "!**/ios",
-      "!infra/data"
+      "!infra/data",
+      "!infra/keycloak/themes",
+      "!packages/keycloak-theme/public"
     ]
   },
   "overrides": [
@@ -57,6 +59,7 @@
           "a11y": {
             "useAriaPropsForRole": "off",
             "useFocusableInteractive": "off",
+            "useHtmlLang": "off",
             "useKeyWithClickEvents": "off",
             "useSemanticElements": "off",
             "useValidAnchor": "off"
@@ -65,6 +68,8 @@
             "noBannedTypes": "off"
           },
           "correctness": {
+            "noInnerDeclarations": "off",
+            "noUnusedVariables": "off",
             "useExhaustiveDependencies": "off",
             "useHookAtTopLevel": "off"
           },

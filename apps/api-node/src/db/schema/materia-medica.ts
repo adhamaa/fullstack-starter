@@ -1,4 +1,4 @@
-import { integer, pgTable, text, timestamp, unique, uuid, varchar } from 'drizzle-orm/pg-core'
+import { integer, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
 import { remedies } from './remedies.js'
 
 export const materiaMedicaSources = pgTable('materia_medica_sources', {

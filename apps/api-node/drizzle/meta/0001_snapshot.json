@@ -42,9 +42,7 @@
         "body_systems_name_unique": {
           "name": "body_systems_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},
@@ -102,9 +100,7 @@
         "clinical_conditions_name_unique": {
           "name": "clinical_conditions_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},
@@ -160,12 +156,8 @@
           "name": "remedy_conditions_remedy_id_remedies_id_fk",
           "tableFrom": "remedy_conditions",
           "tableTo": "remedies",
-          "columnsFrom": [
-            "remedy_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["remedy_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -173,12 +165,8 @@
           "name": "remedy_conditions_condition_id_clinical_conditions_id_fk",
           "tableFrom": "remedy_conditions",
           "tableTo": "clinical_conditions",
-          "columnsFrom": [
-            "condition_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["condition_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -188,10 +176,7 @@
         "remedy_conditions_remedy_id_condition_id_unique": {
           "name": "remedy_conditions_remedy_id_condition_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "remedy_id",
-            "condition_id"
-          ]
+          "columns": ["remedy_id", "condition_id"]
         }
       },
       "policies": {},
@@ -247,12 +232,8 @@
           "name": "formula_remedies_formula_id_formulas_id_fk",
           "tableFrom": "formula_remedies",
           "tableTo": "formulas",
-          "columnsFrom": [
-            "formula_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["formula_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -260,12 +241,8 @@
           "name": "formula_remedies_remedy_id_remedies_id_fk",
           "tableFrom": "formula_remedies",
           "tableTo": "remedies",
-          "columnsFrom": [
-            "remedy_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["remedy_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -275,10 +252,7 @@
         "formula_remedies_formula_id_remedy_id_unique": {
           "name": "formula_remedies_formula_id_remedy_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "formula_id",
-            "remedy_id"
-          ]
+          "columns": ["formula_id", "remedy_id"]
         }
       },
       "policies": {},
@@ -348,9 +322,7 @@
         "formulas_name_unique": {
           "name": "formulas_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},
@@ -442,12 +414,8 @@
           "name": "uploads_user_id_users_id_fk",
           "tableFrom": "uploads",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -609,12 +577,8 @@
           "name": "remedy_sources_remedy_id_remedies_id_fk",
           "tableFrom": "remedy_sources",
           "tableTo": "remedies",
-          "columnsFrom": [
-            "remedy_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["remedy_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -622,12 +586,8 @@
           "name": "remedy_sources_source_id_materia_medica_sources_id_fk",
           "tableFrom": "remedy_sources",
           "tableTo": "materia_medica_sources",
-          "columnsFrom": [
-            "source_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["source_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -688,9 +648,7 @@
         "potencies_name_unique": {
           "name": "potencies_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},
@@ -747,12 +705,8 @@
           "name": "remedy_potencies_remedy_id_remedies_id_fk",
           "tableFrom": "remedy_potencies",
           "tableTo": "remedies",
-          "columnsFrom": [
-            "remedy_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["remedy_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -760,12 +714,8 @@
           "name": "remedy_potencies_potency_id_potencies_id_fk",
           "tableFrom": "remedy_potencies",
           "tableTo": "potencies",
-          "columnsFrom": [
-            "potency_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["potency_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -775,10 +725,7 @@
         "remedy_potencies_remedy_id_potency_id_unique": {
           "name": "remedy_potencies_remedy_id_potency_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "remedy_id",
-            "potency_id"
-          ]
+          "columns": ["remedy_id", "potency_id"]
         }
       },
       "policies": {},
@@ -829,9 +776,7 @@
         "rate_banks_name_unique": {
           "name": "rate_banks_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},
@@ -933,12 +878,8 @@
           "name": "radionic_rates_bank_id_rate_banks_id_fk",
           "tableFrom": "radionic_rates",
           "tableTo": "rate_banks",
-          "columnsFrom": [
-            "bank_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["bank_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -948,10 +889,7 @@
         "radionic_rates_bank_value_unique": {
           "name": "radionic_rates_bank_value_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "bank_id",
-            "value"
-          ]
+          "columns": ["bank_id", "value"]
         }
       },
       "policies": {},
@@ -1027,9 +965,7 @@
         "remedies_name_unique": {
           "name": "remedies_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},
@@ -1079,12 +1015,8 @@
           "name": "mental_symptoms_remedy_id_remedies_id_fk",
           "tableFrom": "mental_symptoms",
           "tableTo": "remedies",
-          "columnsFrom": [
-            "remedy_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["remedy_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1144,12 +1076,8 @@
           "name": "modalities_remedy_id_remedies_id_fk",
           "tableFrom": "modalities",
           "tableTo": "remedies",
-          "columnsFrom": [
-            "remedy_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["remedy_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1209,12 +1137,8 @@
           "name": "remedy_relationships_remedy_id_remedies_id_fk",
           "tableFrom": "remedy_relationships",
           "tableTo": "remedies",
-          "columnsFrom": [
-            "remedy_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["remedy_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1222,12 +1146,8 @@
           "name": "remedy_relationships_related_remedy_id_remedies_id_fk",
           "tableFrom": "remedy_relationships",
           "tableTo": "remedies",
-          "columnsFrom": [
-            "related_remedy_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["related_remedy_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1292,12 +1212,8 @@
           "name": "remedy_symptoms_remedy_id_remedies_id_fk",
           "tableFrom": "remedy_symptoms",
           "tableTo": "remedies",
-          "columnsFrom": [
-            "remedy_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["remedy_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1305,12 +1221,8 @@
           "name": "remedy_symptoms_symptom_id_symptoms_id_fk",
           "tableFrom": "remedy_symptoms",
           "tableTo": "symptoms",
-          "columnsFrom": [
-            "symptom_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["symptom_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1320,10 +1232,7 @@
         "remedy_symptoms_remedy_id_symptom_id_unique": {
           "name": "remedy_symptoms_remedy_id_symptom_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "remedy_id",
-            "symptom_id"
-          ]
+          "columns": ["remedy_id", "symptom_id"]
         }
       },
       "policies": {},
@@ -1392,12 +1301,8 @@
           "name": "symptoms_body_system_id_body_systems_id_fk",
           "tableFrom": "symptoms",
           "tableTo": "body_systems",
-          "columnsFrom": [
-            "body_system_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["body_system_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1413,10 +1318,7 @@
     "public.upload_status": {
       "name": "upload_status",
       "schema": "public",
-      "values": [
-        "pending",
-        "ready"
-      ]
+      "values": ["pending", "ready"]
     }
   },
   "schemas": {},

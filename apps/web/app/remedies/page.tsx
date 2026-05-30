@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { PageShell } from '../../components/site-nav'
-import { remediesApi, type Remedy } from '../../lib/services'
+import { type Remedy, remediesApi } from '../../lib/services'
 
 export default function RemediesPage() {
   const [remedies, setRemedies] = useState<Remedy[]>([])
@@ -67,7 +67,10 @@ export default function RemediesPage() {
             placeholder="Search by name or description..."
             className="min-w-[16rem] flex-1 rounded-lg border border-slate-700 bg-bg-muted px-4 py-2 text-ink"
           />
-          <button type="submit" className="rounded-lg bg-accent px-4 py-2 font-semibold text-accent-fg">
+          <button
+            type="submit"
+            className="rounded-lg bg-accent px-4 py-2 font-semibold text-accent-fg"
+          >
             Search
           </button>
           {searchQuery && (
@@ -102,7 +105,9 @@ export default function RemediesPage() {
                   <h2 className="text-xl font-bold text-ink">{remedy.name}</h2>
                   {remedy.common_name && <p className="text-ink-muted">{remedy.common_name}</p>}
                   {remedy.abbreviation && (
-                    <p className="mt-2 text-sm font-medium text-accent">Abbr: {remedy.abbreviation}</p>
+                    <p className="mt-2 text-sm font-medium text-accent">
+                      Abbr: {remedy.abbreviation}
+                    </p>
                   )}
                   {remedy.description && (
                     <p className="mt-2 line-clamp-3 text-sm text-ink-muted">{remedy.description}</p>

@@ -1,4 +1,13 @@
-import { boolean, integer, pgTable, text, timestamp, unique, uuid, varchar } from 'drizzle-orm/pg-core'
+import {
+  boolean,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  unique,
+  uuid,
+  varchar,
+} from 'drizzle-orm/pg-core'
 import { remedies } from './remedies.js'
 
 export const potencies = pgTable('potencies', {

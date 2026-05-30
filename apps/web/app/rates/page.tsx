@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { PageShell } from '../../components/site-nav'
-import { ratesApi, type RadionicRate, type RateBank } from '../../lib/services'
+import { type RadionicRate, type RateBank, ratesApi } from '../../lib/services'
 
 export default function RatesSearchPage() {
   const [banks, setBanks] = useState<RateBank[]>([])
@@ -15,7 +15,10 @@ export default function RatesSearchPage() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    ratesApi.getBanks().then(setBanks).catch(() => {})
+    ratesApi
+      .getBanks()
+      .then(setBanks)
+      .catch(() => {})
   }, [])
 
   async function runSearch(event?: React.FormEvent) {
@@ -45,7 +48,9 @@ export default function RatesSearchPage() {
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold">Radionic Rate Search</h1>
-          <p className="text-ink-muted">Filter by rate bank, value, or linked remedy/formula name</p>
+          <p className="text-ink-muted">
+            Filter by rate bank, value, or linked remedy/formula name
+          </p>
         </div>
 
         <form onSubmit={runSearch} className="grid gap-3 md:grid-cols-4">
@@ -56,7 +61,9 @@ export default function RatesSearchPage() {
           >
             <option value="">All banks</option>
             {banks.map((item) => (
-              <option key={item.id} value={item.name}>{item.name}</option>
+              <option key={item.id} value={item.name}>
+                {item.name}
+              </option>
             ))}
           </select>
           <input
@@ -71,7 +78,10 @@ export default function RatesSearchPage() {
             placeholder="Search notes or entity name"
             className="rounded-lg border border-slate-700 bg-bg-muted px-3 py-2 md:col-span-2"
           />
-          <button type="submit" className="rounded-lg bg-accent px-4 py-2 font-semibold text-accent-fg md:col-span-4 md:w-fit">
+          <button
+            type="submit"
+            className="rounded-lg bg-accent px-4 py-2 font-semibold text-accent-fg md:col-span-4 md:w-fit"
+          >
             Search rates
           </button>
         </form>
@@ -96,8 +106,8 @@ export default function RatesSearchPage() {
                   <Link href={`/formulas/${rate.rateable_id}`} className="text-accent">
                     {rate.entity_name ?? 'Formula'}
                   </Link>
-                )}
-                {' '}({rate.rateable_type})
+                )}{' '}
+                ({rate.rateable_type})
               </p>
               {rate.category && <p className="text-sm text-ink-muted">Category: {rate.category}</p>}
               {rate.notes && <p className="text-sm">{rate.notes}</p>}

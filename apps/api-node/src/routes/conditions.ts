@@ -2,7 +2,7 @@ import { count, eq } from 'drizzle-orm'
 import { Router } from 'express'
 import { z } from 'zod'
 import { db } from '../db/index.js'
-import { clinicalConditions, remedyConditions, remedies } from '../db/schema/index.js'
+import { clinicalConditions, remedies, remedyConditions } from '../db/schema/index.js'
 import { createConditionSchema, paginationSchema, uuidParamSchema } from '../validation/domain.js'
 
 export const conditionsRouter = Router()
@@ -21,10 +21,7 @@ conditionsRouter.get('/', async (request, response) => {
     .limit(limit)
     .offset(offset)
 
-  const [{ total }] = await db
-    .select({ total: count() })
-    .from(clinicalConditions)
-    .where(conditions)
+  const [{ total }] = await db.select({ total: count() }).from(clinicalConditions).where(conditions)
 
   response.json({
     conditions: rows.map(toConditionDto),

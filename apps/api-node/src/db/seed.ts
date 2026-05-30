@@ -1,5 +1,5 @@
-import { drizzle } from 'drizzle-orm/node-postgres'
 import { eq } from 'drizzle-orm'
+import { drizzle } from 'drizzle-orm/node-postgres'
 import pg from 'pg'
 import { env } from '../env.js'
 import {
@@ -7,16 +7,16 @@ import {
   clinicalConditions,
   formulaRemedies,
   formulas,
-  modalities,
   mentalSymptoms,
+  modalities,
   potencies,
   radionicRates,
   rateBanks,
+  remedies,
   remedyConditions,
   remedyPotencies,
   remedyRelationships,
   remedySymptoms,
-  remedies,
   symptoms,
 } from './schema/index.js'
 
@@ -32,7 +32,10 @@ async function run() {
       { name: 'Nervous System', description: 'Brain, nerves, and neurological functions' },
       { name: 'Respiratory System', description: 'Lungs, bronchi, and breathing' },
       { name: 'Digestive System', description: 'Stomach, intestines, liver, and digestion' },
-      { name: 'Musculoskeletal System', description: 'Muscles, bones, joints, and connective tissue' },
+      {
+        name: 'Musculoskeletal System',
+        description: 'Muscles, bones, joints, and connective tissue',
+      },
       { name: 'Skin', description: 'Integumentary system including skin, hair, nails' },
       { name: 'Mind', description: 'Mental and emotional symptoms' },
       { name: 'Head', description: 'Head, face, and related symptoms' },
@@ -113,12 +116,24 @@ async function run() {
     .onConflictDoNothing()
     .returning()
 
-  const arnica = remedyRows.find((r) => r.name === 'Arnica Montana') ?? (await db.select().from(remedies).where(eq(remedies.name, 'Arnica Montana')))[0]
-  const aconite = remedyRows.find((r) => r.name === 'Aconitum Napellus') ?? (await db.select().from(remedies).where(eq(remedies.name, 'Aconitum Napellus')))[0]
-  const belladonna = remedyRows.find((r) => r.name === 'Belladonna') ?? (await db.select().from(remedies).where(eq(remedies.name, 'Belladonna')))[0]
-  const musculo = bodySystemRows.find((b) => b.name === 'Musculoskeletal System') ?? (await db.select().from(bodySystems).where(eq(bodySystems.name, 'Musculoskeletal System')))[0]
-  const nervous = bodySystemRows.find((b) => b.name === 'Nervous System') ?? (await db.select().from(bodySystems).where(eq(bodySystems.name, 'Nervous System')))[0]
-  const skin = bodySystemRows.find((b) => b.name === 'Skin') ?? (await db.select().from(bodySystems).where(eq(bodySystems.name, 'Skin')))[0]
+  const arnica =
+    remedyRows.find((r) => r.name === 'Arnica Montana') ??
+    (await db.select().from(remedies).where(eq(remedies.name, 'Arnica Montana')))[0]
+  const aconite =
+    remedyRows.find((r) => r.name === 'Aconitum Napellus') ??
+    (await db.select().from(remedies).where(eq(remedies.name, 'Aconitum Napellus')))[0]
+  const belladonna =
+    remedyRows.find((r) => r.name === 'Belladonna') ??
+    (await db.select().from(remedies).where(eq(remedies.name, 'Belladonna')))[0]
+  const musculo =
+    bodySystemRows.find((b) => b.name === 'Musculoskeletal System') ??
+    (await db.select().from(bodySystems).where(eq(bodySystems.name, 'Musculoskeletal System')))[0]
+  const nervous =
+    bodySystemRows.find((b) => b.name === 'Nervous System') ??
+    (await db.select().from(bodySystems).where(eq(bodySystems.name, 'Nervous System')))[0]
+  const skin =
+    bodySystemRows.find((b) => b.name === 'Skin') ??
+    (await db.select().from(bodySystems).where(eq(bodySystems.name, 'Skin')))[0]
 
   if (arnica && musculo && nervous && skin) {
     const symptomRows = await db
@@ -158,7 +173,10 @@ async function run() {
       [symptomRows[3], 2],
     ] as const) {
       if (symptom) {
-        await db.insert(remedySymptoms).values({ remedyId: arnica.id, symptomId: symptom.id, grade }).onConflictDoNothing()
+        await db
+          .insert(remedySymptoms)
+          .values({ remedyId: arnica.id, symptomId: symptom.id, grade })
+          .onConflictDoNothing()
       }
     }
 
@@ -169,34 +187,72 @@ async function run() {
     ])
 
     await db.insert(mentalSymptoms).values([
-      { remedyId: arnica.id, description: 'Says nothing is wrong, sends doctor away', intensity: 'Strong' },
+      {
+        remedyId: arnica.id,
+        description: 'Says nothing is wrong, sends doctor away',
+        intensity: 'Strong',
+      },
     ])
   }
 
   if (aconite) {
     await db.insert(mentalSymptoms).values([
-      { remedyId: aconite.id, description: 'Fear and anxiety, predicts death', intensity: 'Very Strong' },
+      {
+        remedyId: aconite.id,
+        description: 'Fear and anxiety, predicts death',
+        intensity: 'Very Strong',
+      },
     ])
   }
 
-  const potency30 = potencyRows.find((p) => p.name === '30C') ?? (await db.select().from(potencies).where(eq(potencies.name, '30C')))[0]
-  const potency200 = potencyRows.find((p) => p.name === '200C') ?? (await db.select().from(potencies).where(eq(potencies.name, '200C')))[0]
+  const potency30 =
+    potencyRows.find((p) => p.name === '30C') ??
+    (await db.select().from(potencies).where(eq(potencies.name, '30C')))[0]
+  const potency200 =
+    potencyRows.find((p) => p.name === '200C') ??
+    (await db.select().from(potencies).where(eq(potencies.name, '200C')))[0]
 
   if (arnica && potency30) {
-    await db.insert(remedyPotencies).values({ remedyId: arnica.id, potencyId: potency30.id, recommended: true, notes: 'Most commonly used for acute trauma' }).onConflictDoNothing()
+    await db
+      .insert(remedyPotencies)
+      .values({
+        remedyId: arnica.id,
+        potencyId: potency30.id,
+        recommended: true,
+        notes: 'Most commonly used for acute trauma',
+      })
+      .onConflictDoNothing()
   }
   if (arnica && potency200) {
-    await db.insert(remedyPotencies).values({ remedyId: arnica.id, potencyId: potency200.id, recommended: true }).onConflictDoNothing()
+    await db
+      .insert(remedyPotencies)
+      .values({ remedyId: arnica.id, potencyId: potency200.id, recommended: true })
+      .onConflictDoNothing()
   }
 
-  const trauma = conditionRows.find((c) => c.name === 'Trauma') ?? (await db.select().from(clinicalConditions).where(eq(clinicalConditions.name, 'Trauma')))[0]
-  const anxiety = conditionRows.find((c) => c.name === 'Anxiety') ?? (await db.select().from(clinicalConditions).where(eq(clinicalConditions.name, 'Anxiety')))[0]
+  const trauma =
+    conditionRows.find((c) => c.name === 'Trauma') ??
+    (await db.select().from(clinicalConditions).where(eq(clinicalConditions.name, 'Trauma')))[0]
+  const anxiety =
+    conditionRows.find((c) => c.name === 'Anxiety') ??
+    (await db.select().from(clinicalConditions).where(eq(clinicalConditions.name, 'Anxiety')))[0]
 
   if (arnica && trauma) {
-    await db.insert(remedyConditions).values({ remedyId: arnica.id, conditionId: trauma.id, indicationStrength: 'Primary', notes: 'First remedy to consider' }).onConflictDoNothing()
+    await db
+      .insert(remedyConditions)
+      .values({
+        remedyId: arnica.id,
+        conditionId: trauma.id,
+        indicationStrength: 'Primary',
+        notes: 'First remedy to consider',
+      })
+      .onConflictDoNothing()
   }
   if (aconite && anxiety) {
-    await db.insert(remedyConditions).values({ remedyId: aconite.id, conditionId: anxiety.id, indicationStrength: 'Primary' }).onConflictDoNothing()
+    await db
+      .insert(remedyConditions)
+      .values({ remedyId: aconite.id, conditionId: anxiety.id, indicationStrength: 'Primary' })
+      .onConflictDoNothing()
   }
 
   if (arnica && belladonna) {
@@ -211,14 +267,24 @@ async function run() {
   const bankRows = await db
     .insert(rateBanks)
     .values([
-      { name: 'Copen', description: 'Bruce Copen radionic instrument rates', sourceRef: 'Homeopathic Materia Medica Vol. 1' },
+      {
+        name: 'Copen',
+        description: 'Bruce Copen radionic instrument rates',
+        sourceRef: 'Homeopathic Materia Medica Vol. 1',
+      },
       { name: 'Kelly', description: 'Kelly rate catalogue', sourceRef: 'Kelly Radionic Rates' },
-      { name: 'Delawarr', description: 'Delawarr radionic rates', sourceRef: 'Delawarr Laboratory' },
+      {
+        name: 'Delawarr',
+        description: 'Delawarr radionic rates',
+        sourceRef: 'Delawarr Laboratory',
+      },
     ])
     .onConflictDoNothing()
     .returning()
 
-  const copen = bankRows.find((b) => b.name === 'Copen') ?? (await db.select().from(rateBanks).where(eq(rateBanks.name, 'Copen')))[0]
+  const copen =
+    bankRows.find((b) => b.name === 'Copen') ??
+    (await db.select().from(rateBanks).where(eq(rateBanks.name, 'Copen')))[0]
 
   const formulaRows = await db
     .insert(formulas)
@@ -241,32 +307,89 @@ async function run() {
     .onConflictDoNothing()
     .returning()
 
-  const migraineFormula = formulaRows.find((f) => f.name === 'Migraine and Neuralgia') ?? (await db.select().from(formulas).where(eq(formulas.name, 'Migraine and Neuralgia')))[0]
-  const traumaFormula = formulaRows.find((f) => f.name === 'Trauma and Shock') ?? (await db.select().from(formulas).where(eq(formulas.name, 'Trauma and Shock')))[0]
+  const migraineFormula =
+    formulaRows.find((f) => f.name === 'Migraine and Neuralgia') ??
+    (await db.select().from(formulas).where(eq(formulas.name, 'Migraine and Neuralgia')))[0]
+  const traumaFormula =
+    formulaRows.find((f) => f.name === 'Trauma and Shock') ??
+    (await db.select().from(formulas).where(eq(formulas.name, 'Trauma and Shock')))[0]
 
   if (migraineFormula && belladonna) {
-    await db.insert(formulaRemedies).values({ formulaId: migraineFormula.id, remedyId: belladonna.id, proportion: '1x', notes: 'Primary component' }).onConflictDoNothing()
+    await db
+      .insert(formulaRemedies)
+      .values({
+        formulaId: migraineFormula.id,
+        remedyId: belladonna.id,
+        proportion: '1x',
+        notes: 'Primary component',
+      })
+      .onConflictDoNothing()
   }
   if (traumaFormula && arnica) {
-    await db.insert(formulaRemedies).values({ formulaId: traumaFormula.id, remedyId: arnica.id, proportion: '1x' }).onConflictDoNothing()
+    await db
+      .insert(formulaRemedies)
+      .values({ formulaId: traumaFormula.id, remedyId: arnica.id, proportion: '1x' })
+      .onConflictDoNothing()
   }
 
   if (copen && arnica) {
-    await db.insert(radionicRates).values([
-      { bankId: copen.id, value: 'SC/3', rateableType: 'remedy', rateableId: arnica.id, category: 'Trauma', sourcePage: 'p.3' },
-      { bankId: copen.id, value: 'G/21', rateableType: 'remedy', rateableId: arnica.id, category: 'General', notes: 'Arnica broadcast rate' },
-    ]).onConflictDoNothing()
+    await db
+      .insert(radionicRates)
+      .values([
+        {
+          bankId: copen.id,
+          value: 'SC/3',
+          rateableType: 'remedy',
+          rateableId: arnica.id,
+          category: 'Trauma',
+          sourcePage: 'p.3',
+        },
+        {
+          bankId: copen.id,
+          value: 'G/21',
+          rateableType: 'remedy',
+          rateableId: arnica.id,
+          category: 'General',
+          notes: 'Arnica broadcast rate',
+        },
+      ])
+      .onConflictDoNothing()
   }
 
   if (copen && migraineFormula) {
-    await db.insert(radionicRates).values([
-      { bankId: copen.id, value: 'C/15', rateableType: 'formula', rateableId: migraineFormula.id, category: 'Head', sourcePage: 'p.5' },
-      { bankId: copen.id, value: 'SC/12', rateableType: 'formula', rateableId: migraineFormula.id, category: 'Neuralgia' },
-    ]).onConflictDoNothing()
+    await db
+      .insert(radionicRates)
+      .values([
+        {
+          bankId: copen.id,
+          value: 'C/15',
+          rateableType: 'formula',
+          rateableId: migraineFormula.id,
+          category: 'Head',
+          sourcePage: 'p.5',
+        },
+        {
+          bankId: copen.id,
+          value: 'SC/12',
+          rateableType: 'formula',
+          rateableId: migraineFormula.id,
+          category: 'Neuralgia',
+        },
+      ])
+      .onConflictDoNothing()
   }
 
   if (copen && traumaFormula) {
-    await db.insert(radionicRates).values({ bankId: copen.id, value: 'G/6', rateableType: 'formula', rateableId: traumaFormula.id, category: 'Trauma' }).onConflictDoNothing()
+    await db
+      .insert(radionicRates)
+      .values({
+        bankId: copen.id,
+        value: 'G/6',
+        rateableType: 'formula',
+        rateableId: traumaFormula.id,
+        category: 'Trauma',
+      })
+      .onConflictDoNothing()
   }
 
   console.log('Seed complete')
